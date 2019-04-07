@@ -1,0 +1,24 @@
+00F03000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 4/20/2018 9:42:03 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : S-Record Test
+00000000                             3  * Written by : Micah Richards
+00000000                             4  *              Eklektik Design
+00000000                             5  * Date       : 04/20/18
+00000000                             6  * Description: Simple code to test S-Record Functionality
+00000000                             7  *
+00000000                             8  *-----------------------------------------------------------
+00F03000                             9              ORG     $00F03000        
+00F03000  4E75                      10  MAIN        RTS
+00F03002                            11              END MAIN
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+MAIN                F03000

@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Users\shimonrigdon\Desktop\Micah for uComp\uComp_CPLD\impact.xsl
+OUTFILE=C:\Users\shimonrigdon\Desktop\Micah for uComp\uComp_CPLD\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Users\shimonrigdon\Desktop\Micah for uComp\uComp_CPLD
+LICENSE=iMPACT
+USER_INFO=iMPACT

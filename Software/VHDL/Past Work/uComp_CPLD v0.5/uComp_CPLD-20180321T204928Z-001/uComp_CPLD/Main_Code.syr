@@ -1,0 +1,255 @@
+Release 14.6 - xst P.68d (nt)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.14 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.14 secs
+ 
+--> Reading design: Main_Code.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "Main_Code.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "Main_Code"
+Output Format                      : NGC
+Target Device                      : XC9500 CPLDs
+
+---- Source Options
+Top Module Name                    : Main_Code
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+
+---- Target Options
+Add IO Buffers                     : YES
+MACRO Preserve                     : YES
+XOR Preserve                       : YES
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : Yes
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Verilog 2001                       : YES
+
+---- Other Options
+wysiwyg                            : NO
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "C:/Users/MicahRichards/Downloads/uComp_CPLD-20180321T204928Z-001/uComp_CPLD/Main_Code.vhd" in Library work.
+Entity <main_code> compiled.
+Entity <main_code> (Architecture <behavioral>) compiled.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <Main_Code> in library <work> (architecture <behavioral>).
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <Main_Code> in library <work> (Architecture <behavioral>).
+Entity <Main_Code> analyzed. Unit <Main_Code> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <Main_Code>.
+    Related source file is "C:/Users/MicahRichards/Downloads/uComp_CPLD-20180321T204928Z-001/uComp_CPLD/Main_Code.vhd".
+WARNING:Xst:647 - Input <L_Data_Ready> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <Add_Data_Valid> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <H_Data_Ready> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <CPU_Enable> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <Read_Write> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <CPU_Bus_Grant> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <CPU_Valid_Memory_Add> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:1306 - Output <ROM_L_Input> is never assigned.
+WARNING:Xst:1306 - Output <ROM_H_Input> is never assigned.
+    Register <LED<2>> equivalent to <CPU_Data_ACK> has been removed
+    Register <LED<1>> equivalent to <DUART_Enable> has been removed
+    Register <ROM_H_Output> equivalent to <ROM_H_Enable> has been removed
+    Register <ROM_L_Output> equivalent to <ROM_L_Enable> has been removed
+    Found 1-bit register for signal <ROM_H_Enable>.
+    Found 1-bit register for signal <ROM_L_Enable>.
+    Found 1-bit register for signal <RAM_H_Enable>.
+    Found 1-bit register for signal <RAM_H_Output>.
+    Found 1-bit register for signal <RAM_H_Input>.
+    Found 1-bit register for signal <RAM_L_Enable>.
+    Found 1-bit register for signal <RAM_L_Output>.
+    Found 1-bit register for signal <RAM_L_Input>.
+    Found 1-bit register for signal <DUART_Enable>.
+    Found 1-bit register for signal <DUART_Read_Write>.
+    Found 1-bit register for signal <CPU_Data_ACK>.
+    Found 1-bit tristate buffer for signal <CPU_Reset>.
+    Found 1-bit tristate buffer for signal <CPU_Halt>.
+    Found 13-bit up counter for signal <I_Count1>.
+    Found 5-bit up counter for signal <I_Count2>.
+    Found 1-bit register for signal <I_CPU_Clock>.
+    Found 1-bit register for signal <I_Reset_Triggered>.
+    Summary:
+	inferred   2 Counter(s).
+	inferred   8 D-type flip-flop(s).
+	inferred   2 Tristate(s).
+Unit <Main_Code> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Counters                                             : 2
+ 13-bit up counter                                     : 1
+ 5-bit up counter                                      : 1
+# Registers                                            : 13
+ 1-bit register                                        : 13
+# Tristates                                            : 2
+ 1-bit tristate buffer                                 : 2
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Counters                                             : 2
+ 13-bit up counter                                     : 1
+ 5-bit up counter                                      : 1
+# Registers                                            : 8
+ Flip-Flops                                            : 8
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <Main_Code> ...
+  implementation constraint: INIT=r	 : I_Count2_3
+  implementation constraint: INIT=r	 : I_Count2_4
+  implementation constraint: INIT=r	 : I_Count2_2
+  implementation constraint: INIT=r	 : I_Count1_12
+  implementation constraint: INIT=r	 : I_Count2_1
+  implementation constraint: INIT=s	 : I_Count1_0
+  implementation constraint: INIT=r	 : I_Count1_1
+  implementation constraint: INIT=r	 : I_Count1_2
+  implementation constraint: INIT=r	 : I_Count1_3
+  implementation constraint: INIT=r	 : I_Count1_4
+  implementation constraint: INIT=r	 : I_Count1_5
+  implementation constraint: INIT=r	 : I_Count1_6
+  implementation constraint: INIT=r	 : I_Count1_7
+  implementation constraint: INIT=r	 : I_Count1_8
+  implementation constraint: INIT=r	 : I_Count1_9
+  implementation constraint: INIT=r	 : I_Count1_10
+  implementation constraint: INIT=r	 : I_Count1_11
+  implementation constraint: INIT=r	 : I_CPU_Clock
+  implementation constraint: INIT=r	 : I_Reset_Triggered
+  implementation constraint: INIT=s	 : I_Count2_0
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : Main_Code.ngr
+Top Level Output File Name         : Main_Code
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : Yes
+Target Technology                  : XC9500 CPLDs
+Macro Preserve                     : YES
+XOR Preserve                       : YES
+wysiwyg                            : NO
+
+Design Statistics
+# IOs                              : 45
+
+Cell Usage :
+# BELS                             : 210
+#      AND2                        : 69
+#      AND3                        : 4
+#      AND4                        : 5
+#      AND5                        : 1
+#      GND                         : 1
+#      INV                         : 81
+#      OR2                         : 27
+#      OR3                         : 4
+#      VCC                         : 1
+#      XOR2                        : 17
+# FlipFlops/Latches                : 31
+#      FD                          : 31
+# IO Buffers                       : 36
+#      IBUF                        : 11
+#      OBUF                        : 23
+#      OBUFE                       : 2
+=========================================================================
+
+
+Total REAL time to Xst completion: 4.00 secs
+Total CPU time to Xst completion: 4.12 secs
+ 
+--> 
+
+Total memory usage is 199308 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    9 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+

@@ -1,0 +1,559 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="paths.js"></script><script src="eqns.js"></script><script>
+      var design = "Main_Code";
+      var device = "XC9572";
+      signals = new Array("CPU_Bus_ERR","CPU_Bus_Grant_ACK","CPU_Bus_REQ","CPU_Clock","CPU_Data_ACK","CPU_Halt","CPU_Reset","CPU_Valid_Periph_Add","DUART_Enable","DUART_Read_Write","DUART_Reset","I_Count10_SPECSIG","I_Count110_SPECSIG","I_Count111_SPECSIG","I_Count112_SPECSIG","I_Count11_SPECSIG","I_Count12_SPECSIG","I_Count13_SPECSIG","I_Count14_SPECSIG","I_Count15_SPECSIG","I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","I_Count19_SPECSIG","I_Count20_SPECSIG","I_Count21_SPECSIG","I_Count22_SPECSIG","I_Count23_SPECSIG","I_Count24_SPECSIG","LED0_SPECSIG","LED1_SPECSIG","LED2_SPECSIG","LED3_SPECSIG","RAM_H_Enable","RAM_H_Input","RAM_H_Output","RAM_L_Enable","RAM_L_Input","RAM_L_Output","ROM_H_Enable","ROM_H_Output","ROM_L_Enable","ROM_L_Output");
+      sigNegs = new Array("OFF","OFF","OFF","OFF","ON","OFF","OFF","OFF","ON","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","ON","ON","OFF","ON","ON","ON","ON","ON","ON","ON","ON","ON","ON");
+      sigTypes = new Array("","","","","D","","","","D","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","","D","D","","D","D","D","D","D","D","D","D","D","D");
+
+      
+        specSig["ADDR3_SPECSIG"]=new Array("ADDR<3>");
+      
+        specSig["ADDR2_SPECSIG"]=new Array("ADDR<2>");
+      
+        specSig["ADDR1_SPECSIG"]=new Array("ADDR<1>");
+      
+        specSig["ADDR0_SPECSIG"]=new Array("ADDR<0>");
+      
+        specSig["DUART_ResetPIN_SPECSIG"]=new Array("DUART_Reset.PIN");
+      
+        specSig["LED3_SPECSIG"]=new Array("LED<3>");
+      
+        specSig["LED0_SPECSIG"]=new Array("LED<0>");
+      
+        specSig["LED1_SPECSIG"]=new Array("LED<1>");
+      
+        specSig["LED2_SPECSIG"]=new Array("LED<2>");
+      
+        specSig["GCKI_SPECSIG"]=new Array("GCK/I");
+      
+        specSig["b_SPECSIG"]=new Array("(b)");
+      
+        specSig["I_Count24_SPECSIG"]=new Array("I_Count2<4>");
+      
+        specSig["I_Count23_SPECSIG"]=new Array("I_Count2<3>");
+      
+        specSig["IO_SPECSIG"]=new Array("I/O");
+      
+        specSig["I_Count21_SPECSIG"]=new Array("I_Count2<1>");
+      
+        specSig["I_Count20_SPECSIG"]=new Array("I_Count2<0>");
+      
+        specSig["I_Count15_SPECSIG"]=new Array("I_Count1<5>");
+      
+        specSig["I_Count13_SPECSIG"]=new Array("I_Count1<3>");
+      
+        specSig["I_Count11_SPECSIG"]=new Array("I_Count1<1>");
+      
+        specSig["I_Count111_SPECSIG"]=new Array("I_Count1<11>");
+      
+        specSig["I_Count110_SPECSIG"]=new Array("I_Count1<10>");
+      
+        specSig["I_Count22_SPECSIG"]=new Array("I_Count2<2>");
+      
+        specSig["I_Count112_SPECSIG"]=new Array("I_Count1<12>");
+      
+        specSig["DUART_Read_Write_OBUFLFBK_SPECSIG"]=new Array("DUART_Read_Write_OBUF.LFBK");
+      
+        specSig["DUART_Reset_OBUFLFBK_SPECSIG"]=new Array("DUART_Reset_OBUF.LFBK");
+      
+        specSig["I_Count10_SPECSIG"]=new Array("I_Count1<0>");
+      
+        specSig["I_Count112LFBK_SPECSIG"]=new Array("I_Count1<12>.LFBK");
+      
+        specSig["I_Count12_SPECSIG"]=new Array("I_Count1<2>");
+      
+        specSig["I_Count14_SPECSIG"]=new Array("I_Count1<4>");
+      
+        specSig["I_Count16_SPECSIG"]=new Array("I_Count1<6>");
+      
+        specSig["I_Count17_SPECSIG"]=new Array("I_Count1<7>");
+      
+        specSig["I_Count18_SPECSIG"]=new Array("I_Count1<8>");
+      
+        specSig["I_Count19_SPECSIG"]=new Array("I_Count1<9>");
+      
+        specSig["I_Count20LFBK_SPECSIG"]=new Array("I_Count2<0>.LFBK");
+      
+        specSig["I_Count21LFBK_SPECSIG"]=new Array("I_Count2<1>.LFBK");
+      
+        specSig["I_Count22LFBK_SPECSIG"]=new Array("I_Count2<2>.LFBK");
+      
+        specSig["I_Count23LFBK_SPECSIG"]=new Array("I_Count2<3>.LFBK");
+      
+        specSig["I_Count24LFBK_SPECSIG"]=new Array("I_Count2<4>.LFBK");
+      
+        specSig["I_Count10LFBK_SPECSIG"]=new Array("I_Count1<0>.LFBK");
+      
+        specSig["I_Count110LFBK_SPECSIG"]=new Array("I_Count1<10>.LFBK");
+      
+        specSig["I_Count111LFBK_SPECSIG"]=new Array("I_Count1<11>.LFBK");
+      
+        specSig["I_Count11LFBK_SPECSIG"]=new Array("I_Count1<1>.LFBK");
+      
+        specSig["I_Count12LFBK_SPECSIG"]=new Array("I_Count1<2>.LFBK");
+      
+        specSig["I_Count13LFBK_SPECSIG"]=new Array("I_Count1<3>.LFBK");
+      
+        specSig["I_Count14LFBK_SPECSIG"]=new Array("I_Count1<4>.LFBK");
+      
+        specSig["I_Count15LFBK_SPECSIG"]=new Array("I_Count1<5>.LFBK");
+      
+        specSig["I_Count16LFBK_SPECSIG"]=new Array("I_Count1<6>.LFBK");
+      
+        specSig["I_Count17LFBK_SPECSIG"]=new Array("I_Count1<7>.LFBK");
+      
+        specSig["I_Count18LFBK_SPECSIG"]=new Array("I_Count1<8>.LFBK");
+      
+        specSig["I_Count19LFBK_SPECSIG"]=new Array("I_Count1<9>.LFBK");
+      
+            pterms["FB1_1_1"]=new Array("CPU_Add_Valid");
+          
+            pterms["FB1_2_1"]=new Array("CPU_Read_Write");
+          
+            pterms["FB1_3_1"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB1_5_1"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB1_5_2"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB1_5_3"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB1_6_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB1_6_2"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB1_6_3"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","/DUART_Data_ACK");
+          
+            pterms["FB1_6_4"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","/DUART_Data_ACK");
+          
+            pterms["FB1_6_5"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB1_8_1"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB1_9_1"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count21LFBK_SPECSIG");
+          
+            pterms["FB1_10_1"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count23LFBK_SPECSIG","I_Count21LFBK_SPECSIG","I_Count22LFBK_SPECSIG");
+          
+            pterms["FB1_10_2"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count23LFBK_SPECSIG","I_Count24LFBK_SPECSIG","/I_Count21LFBK_SPECSIG","/I_Count22LFBK_SPECSIG");
+          
+            pterms["FB1_11_1"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count21LFBK_SPECSIG","I_Count22LFBK_SPECSIG");
+          
+            pterms["FB1_11_2"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count23LFBK_SPECSIG","I_Count24LFBK_SPECSIG","/I_Count21LFBK_SPECSIG","/I_Count22LFBK_SPECSIG");
+          
+            pterms["FB1_12_1"]=new Array("I_Count10_SPECSIG","I_Count110_SPECSIG","I_Count111_SPECSIG","I_Count11_SPECSIG","I_Count12_SPECSIG","I_Count13_SPECSIG","I_Count14_SPECSIG","I_Count15_SPECSIG","I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","I_Count19_SPECSIG");
+          
+            pterms["FB1_12_2"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count112LFBK_SPECSIG");
+          
+            pterms["FB1_13_1"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","CPLD_Button","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count23LFBK_SPECSIG","I_Count24LFBK_SPECSIG","/I_Count21LFBK_SPECSIG","/I_Count22LFBK_SPECSIG","/DUART_Reset_OBUFLFBK_SPECSIG");
+          
+            pterms["FB1_13_2"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","/CPLD_Button","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count23LFBK_SPECSIG","I_Count24LFBK_SPECSIG","/I_Count21LFBK_SPECSIG","/I_Count22LFBK_SPECSIG","DUART_Reset_OBUFLFBK_SPECSIG");
+          
+            pterms["FB1_14_1"]=new Array("CPLD_CLK");
+          
+            pterms["FB1_15_1"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","CPU_Read_Write","/DUART_Read_Write_OBUFLFBK_SPECSIG");
+          
+            pterms["FB1_15_2"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","/CPU_Read_Write","DUART_Read_Write_OBUFLFBK_SPECSIG");
+          
+            pterms["FB1_15_3"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","CPU_Read_Write","/DUART_Read_Write_OBUFLFBK_SPECSIG");
+          
+            pterms["FB1_15_4"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","/CPU_Read_Write","DUART_Read_Write_OBUFLFBK_SPECSIG");
+          
+            pterms["FB1_16_1"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","/I_Count23LFBK_SPECSIG");
+          
+            pterms["FB1_16_2"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","/I_Count24LFBK_SPECSIG");
+          
+            pterms["FB1_16_3"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count21LFBK_SPECSIG");
+          
+            pterms["FB1_16_4"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG","I_Count22LFBK_SPECSIG");
+          
+            pterms["FB1_17_1"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","/I_Count20LFBK_SPECSIG","I_Count112LFBK_SPECSIG");
+          
+            pterms["FB1_17_2"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count112LFBK_SPECSIG","/I_Count23LFBK_SPECSIG");
+          
+            pterms["FB1_17_3"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count112LFBK_SPECSIG","/I_Count24LFBK_SPECSIG");
+          
+            pterms["FB1_17_4"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count112LFBK_SPECSIG","I_Count21LFBK_SPECSIG");
+          
+            pterms["FB1_17_5"]=new Array("/I_Count10_SPECSIG","/I_Count110_SPECSIG","/I_Count111_SPECSIG","/I_Count11_SPECSIG","I_Count12_SPECSIG","/I_Count13_SPECSIG","I_Count14_SPECSIG","/I_Count15_SPECSIG","/I_Count16_SPECSIG","I_Count17_SPECSIG","I_Count18_SPECSIG","/I_Count19_SPECSIG","I_Count112LFBK_SPECSIG","I_Count22LFBK_SPECSIG");
+          
+            pterms["FB1_18_1"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB1_18_2"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB2_4_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","I_Count15LFBK_SPECSIG","I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG","I_Count18LFBK_SPECSIG");
+          
+            pterms["FB2_5_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","I_Count15LFBK_SPECSIG");
+          
+            pterms["FB2_6_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG");
+          
+            pterms["FB2_7_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG");
+          
+            pterms["FB2_9_1"]=new Array("I_Count10LFBK_SPECSIG");
+          
+            pterms["FB2_11_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","I_Count15LFBK_SPECSIG","I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG","I_Count18LFBK_SPECSIG","I_Count19LFBK_SPECSIG","I_Count110LFBK_SPECSIG");
+          
+            pterms["FB2_12_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","I_Count15LFBK_SPECSIG","I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG","I_Count18LFBK_SPECSIG","I_Count19LFBK_SPECSIG");
+          
+            pterms["FB2_12_2"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB2_13_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB2_13_2"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB2_13_3"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","/DUART_Data_ACK");
+          
+            pterms["FB2_13_4"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","/DUART_Data_ACK");
+          
+            pterms["FB2_13_5"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB2_15_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","I_Count15LFBK_SPECSIG","I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG");
+          
+            pterms["FB2_15_2"]=new Array("I_Count112_SPECSIG","/I_Count10LFBK_SPECSIG","/I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","/I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","/I_Count15LFBK_SPECSIG","/I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG","I_Count18LFBK_SPECSIG","/I_Count19LFBK_SPECSIG","/I_Count110LFBK_SPECSIG","/I_Count111LFBK_SPECSIG");
+          
+            pterms["FB2_16_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","I_Count15LFBK_SPECSIG","I_Count16LFBK_SPECSIG");
+          
+            pterms["FB2_16_2"]=new Array("I_Count112_SPECSIG","/I_Count10LFBK_SPECSIG","/I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","/I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","/I_Count15LFBK_SPECSIG","/I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG","I_Count18LFBK_SPECSIG","/I_Count19LFBK_SPECSIG","/I_Count110LFBK_SPECSIG","/I_Count111LFBK_SPECSIG");
+          
+            pterms["FB2_17_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","I_Count13LFBK_SPECSIG");
+          
+            pterms["FB2_17_2"]=new Array("I_Count112_SPECSIG","/I_Count10LFBK_SPECSIG","/I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","/I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","/I_Count15LFBK_SPECSIG","/I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG","I_Count18LFBK_SPECSIG","/I_Count19LFBK_SPECSIG","/I_Count110LFBK_SPECSIG","/I_Count111LFBK_SPECSIG");
+          
+            pterms["FB2_18_1"]=new Array("I_Count10LFBK_SPECSIG","I_Count11LFBK_SPECSIG");
+          
+            pterms["FB2_18_2"]=new Array("I_Count112_SPECSIG","/I_Count10LFBK_SPECSIG","/I_Count11LFBK_SPECSIG","I_Count12LFBK_SPECSIG","/I_Count13LFBK_SPECSIG","I_Count14LFBK_SPECSIG","/I_Count15LFBK_SPECSIG","/I_Count16LFBK_SPECSIG","I_Count17LFBK_SPECSIG","I_Count18LFBK_SPECSIG","/I_Count19LFBK_SPECSIG","/I_Count110LFBK_SPECSIG","/I_Count111LFBK_SPECSIG");
+          
+            pterms["FB3_7_1"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB3_10_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB3_11_1"]=new Array("/ADDR3_SPECSIG","/ADDR2_SPECSIG","/ADDR1_SPECSIG","/ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB3_12_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid","/CPU_Read_Write");
+          
+            pterms["FB3_13_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB3_16_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","CPU_Read_Write");
+          
+            pterms["FB3_17_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_H_Data_Ready","/CPU_Add_Valid");
+          
+            pterms["FB4_2_1"]=new Array("ADDR3_SPECSIG","ADDR2_SPECSIG","ADDR1_SPECSIG","ADDR0_SPECSIG","/CPU_L_Data_Ready","/CPU_Add_Valid","/CPU_Read_Write");
+          
+            pterms["FB4_3_1"]=new Array("/DUART_ResetPIN_SPECSIG");
+          
+            pterms["FB4_11_1"]=new Array("/DUART_ResetPIN_SPECSIG");
+          
+          d2["LED3_SPECSIG"]=new Array("FB1_1_1");
+          
+            d2imp["LED3_SPECSIG"]=new Array("0");
+          
+          d2["LED0_SPECSIG"]=new Array("FB1_2_1");
+          
+            d2imp["LED0_SPECSIG"]=new Array("0");
+          
+          d2["ROM_H_Output"]=new Array("FB1_3_1");
+          
+            d2imp["ROM_H_Output"]=new Array("0");
+          
+              gblclk["ROM_H_Output"]=new Array("CPLD_CLK");
+            prld["ROM_H_Output"]="GND";
+          d2["LED1_SPECSIG"]=new Array("FB1_5_1","FB1_5_2");
+          
+            d2imp["LED1_SPECSIG"]=new Array("0","0");
+          
+              gblclk["LED1_SPECSIG"]=new Array("CPLD_CLK");
+            prld["LED1_SPECSIG"]="GND";
+          d2["LED2_SPECSIG"]=new Array("FB1_6_1","FB1_6_2","FB1_6_3","FB1_6_4","FB1_6_5","FB1_5_3");
+          
+            d2imp["LED2_SPECSIG"]=new Array("0","0","0","0","0","1");
+          
+              gblclk["LED2_SPECSIG"]=new Array("CPLD_CLK");
+            prld["LED2_SPECSIG"]="GND";
+          d2["ROM_H_Enable"]=new Array("FB1_8_1");
+          
+            d2imp["ROM_H_Enable"]=new Array("0");
+          
+              gblclk["ROM_H_Enable"]=new Array("CPLD_CLK");
+            prld["ROM_H_Enable"]="GND";
+          d2["I_Count22_SPECSIG"]=new Array("FB1_9_1");
+          
+            d2imp["I_Count22_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count22_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count22_SPECSIG"]="GND";
+          d2["I_Count24_SPECSIG"]=new Array("FB1_10_1","FB1_10_2");
+          
+            d2imp["I_Count24_SPECSIG"]=new Array("0","0");
+          
+              gblclk["I_Count24_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count24_SPECSIG"]="GND";
+          d2["I_Count23_SPECSIG"]=new Array("FB1_11_1","FB1_11_2");
+          
+            d2imp["I_Count23_SPECSIG"]=new Array("0","0");
+          
+              gblclk["I_Count23_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count23_SPECSIG"]="GND";
+          d2["I_Count112_SPECSIG"]=new Array("FB1_12_1","FB1_12_2");
+          
+            d2imp["I_Count112_SPECSIG"]=new Array("0","0");
+          
+              gblclk["I_Count112_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count112_SPECSIG"]="GND";
+          d2["DUART_Reset"]=new Array("FB1_13_1","FB1_13_2");
+          
+            d2imp["DUART_Reset"]=new Array("0","0");
+          
+              gblclk["DUART_Reset"]=new Array("CPLD_CLK");
+            prld["DUART_Reset"]="VCC";
+          d2["CPU_Clock"]=new Array("FB1_14_1");
+          
+            d2imp["CPU_Clock"]=new Array("0");
+          
+          d2["DUART_Read_Write"]=new Array("FB1_15_1","FB1_15_2","FB1_15_3","FB1_15_4");
+          
+            d2imp["DUART_Read_Write"]=new Array("0","0","0","0");
+          
+              gblclk["DUART_Read_Write"]=new Array("CPLD_CLK");
+            prld["DUART_Read_Write"]="GND";
+          d2["I_Count21_SPECSIG"]=new Array("FB1_16_1","FB1_16_2","FB1_16_3","FB1_16_4");
+          
+            d2imp["I_Count21_SPECSIG"]=new Array("0","0","0","0");
+          
+              gblclk["I_Count21_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count21_SPECSIG"]="GND";
+          d2["I_Count20_SPECSIG"]=new Array("FB1_17_1","FB1_17_2","FB1_17_3","FB1_17_4","FB1_17_5");
+          
+            d2imp["I_Count20_SPECSIG"]=new Array("0","0","0","0","0");
+          
+              gblclk["I_Count20_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count20_SPECSIG"]="VCC";
+          d2["DUART_Enable"]=new Array("FB1_18_1","FB1_18_2");
+          
+            d2imp["DUART_Enable"]=new Array("0","0");
+          
+              gblclk["DUART_Enable"]=new Array("CPLD_CLK");
+            prld["DUART_Enable"]="GND";
+          d2["I_Count19_SPECSIG"]=new Array("FB2_4_1");
+          
+            d2imp["I_Count19_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count19_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count19_SPECSIG"]="GND";
+          d2["I_Count16_SPECSIG"]=new Array("FB2_5_1");
+          
+            d2imp["I_Count16_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count16_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count16_SPECSIG"]="GND";
+          d2["I_Count15_SPECSIG"]=new Array("FB2_6_1");
+          
+            d2imp["I_Count15_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count15_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count15_SPECSIG"]="GND";
+          d2["I_Count13_SPECSIG"]=new Array("FB2_7_1");
+          
+            d2imp["I_Count13_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count13_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count13_SPECSIG"]="GND";
+          d2["CPU_Bus_REQ"]=new Array("VCC");
+          
+            d2imp["CPU_Bus_REQ"]=new Array("0");
+          
+          d2["I_Count11_SPECSIG"]=new Array("FB2_9_1");
+          
+            d2imp["I_Count11_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count11_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count11_SPECSIG"]="GND";
+          d2["CPU_Bus_Grant_ACK"]=new Array("VCC");
+          
+            d2imp["CPU_Bus_Grant_ACK"]=new Array("0");
+          
+          d2["I_Count111_SPECSIG"]=new Array("FB2_11_1");
+          
+            d2imp["I_Count111_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count111_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count111_SPECSIG"]="GND";
+          d2["I_Count110_SPECSIG"]=new Array("FB2_12_1");
+          
+            d2imp["I_Count110_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count110_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count110_SPECSIG"]="GND";
+          d2["CPU_Data_ACK"]=new Array("FB2_13_1","FB2_13_2","FB2_13_3","FB2_13_4","FB2_13_5","FB2_12_2");
+          
+            d2imp["CPU_Data_ACK"]=new Array("0","0","0","0","0","1");
+          
+              gblclk["CPU_Data_ACK"]=new Array("CPLD_CLK");
+            prld["CPU_Data_ACK"]="GND";
+          d2["I_Count10_SPECSIG"]=new Array("VCC");
+          
+            d2imp["I_Count10_SPECSIG"]=new Array("0");
+          
+              gblclk["I_Count10_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count10_SPECSIG"]="VCC";
+          d2["I_Count18_SPECSIG"]=new Array("FB2_15_1","FB2_15_2");
+          
+            d2imp["I_Count18_SPECSIG"]=new Array("0","0");
+          
+              gblclk["I_Count18_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count18_SPECSIG"]="GND";
+          d2["I_Count17_SPECSIG"]=new Array("FB2_16_1","FB2_16_2");
+          
+            d2imp["I_Count17_SPECSIG"]=new Array("0","0");
+          
+              gblclk["I_Count17_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count17_SPECSIG"]="GND";
+          d2["I_Count14_SPECSIG"]=new Array("FB2_17_1","FB2_17_2");
+          
+            d2imp["I_Count14_SPECSIG"]=new Array("0","0");
+          
+              gblclk["I_Count14_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count14_SPECSIG"]="GND";
+          d2["I_Count12_SPECSIG"]=new Array("FB2_18_1","FB2_18_2");
+          
+            d2imp["I_Count12_SPECSIG"]=new Array("0","0");
+          
+              gblclk["I_Count12_SPECSIG"]=new Array("CPLD_CLK");
+            prld["I_Count12_SPECSIG"]="GND";
+          d2["ROM_L_Output"]=new Array("FB3_7_1");
+          
+            d2imp["ROM_L_Output"]=new Array("0");
+          
+              gblclk["ROM_L_Output"]=new Array("CPLD_CLK");
+            prld["ROM_L_Output"]="GND";
+          d2["RAM_H_Output"]=new Array("FB3_10_1");
+          
+            d2imp["RAM_H_Output"]=new Array("0");
+          
+              gblclk["RAM_H_Output"]=new Array("CPLD_CLK");
+            prld["RAM_H_Output"]="GND";
+          d2["ROM_L_Enable"]=new Array("FB3_11_1");
+          
+            d2imp["ROM_L_Enable"]=new Array("0");
+          
+              gblclk["ROM_L_Enable"]=new Array("CPLD_CLK");
+            prld["ROM_L_Enable"]="GND";
+          d2["RAM_H_Input"]=new Array("FB3_12_1");
+          
+            d2imp["RAM_H_Input"]=new Array("0");
+          
+              gblclk["RAM_H_Input"]=new Array("CPLD_CLK");
+            prld["RAM_H_Input"]="GND";
+          d2["RAM_L_Enable"]=new Array("FB3_13_1");
+          
+            d2imp["RAM_L_Enable"]=new Array("0");
+          
+              gblclk["RAM_L_Enable"]=new Array("CPLD_CLK");
+            prld["RAM_L_Enable"]="GND";
+          d2["RAM_L_Output"]=new Array("FB3_16_1");
+          
+            d2imp["RAM_L_Output"]=new Array("0");
+          
+              gblclk["RAM_L_Output"]=new Array("CPLD_CLK");
+            prld["RAM_L_Output"]="GND";
+          d2["RAM_H_Enable"]=new Array("FB3_17_1");
+          
+            d2imp["RAM_H_Enable"]=new Array("0");
+          
+              gblclk["RAM_H_Enable"]=new Array("CPLD_CLK");
+            prld["RAM_H_Enable"]="GND";
+          d2["CPU_Bus_ERR"]=new Array("VCC");
+          
+            d2imp["CPU_Bus_ERR"]=new Array("0");
+          
+          d2["RAM_L_Input"]=new Array("FB4_2_1");
+          
+            d2imp["RAM_L_Input"]=new Array("0");
+          
+              gblclk["RAM_L_Input"]=new Array("CPLD_CLK");
+            prld["RAM_L_Input"]="GND";
+          d2["CPU_Reset"]=new Array("GND");
+          
+            d2imp["CPU_Reset"]=new Array("0");
+          
+              trst["CPU_Reset"]=new Array("FB4_3_1");
+              
+                trstimp["CPU_Reset"]=new Array("0");
+              
+          d2["CPU_Valid_Periph_Add"]=new Array("VCC");
+          
+            d2imp["CPU_Valid_Periph_Add"]=new Array("0");
+          
+          d2["CPU_Halt"]=new Array("GND");
+          
+            d2imp["CPU_Halt"]=new Array("0");
+          
+              trst["CPU_Halt"]=new Array("FB4_11_1");
+              
+                trstimp["CPU_Halt"]=new Array("0");
+              
+
+      uimSignals = new Array();
+
+      uimSigNegs = new Array();
+
+      uimPterms = new Array();
+      
+
+      
+        function getEqnList() {
+          var str = "<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>";
+          str += "<center><h3>Equations</h3></center>";
+          str += "<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>";
+          for (s=0; s<uimSignals.length; s++) {
+            str += "<tr><td>";
+            str += retUimEqn(uimSignals[s]);
+            str += "</td></tr>";
+          }
+          for (s=0; s<signals.length; s++) {
+            str += "<tr><td>";
+            str += retEqn(signals[s]);
+            str += "</td></tr>";
+          }
+
+          var legend = retLegend();
+		      if (legend != "") {
+		        str += "<tr><td>" + legend + "</td></tr>";
+		      }
+
+          str += "</table>";
+          str += "<form><span class='pgRef'>";
+
+          if (!parent.leftnav.IsNS()) {
+            str += "<table width='90%' align='center'>";
+            str += "<tr><td align='left'><input type='button' value='back to top' ";
+            str += "onclick='javascript:parent.leftnav.showEqnAll()' ";
+            str += "onmouseover=\"window.status='goto top of page'; return true;\" ";
+            str += "onmouseout=\"window.status=''\">";
+            str += "</td>";
+            str += "<td align='right'>";
+            str += "<input type='button' value='print page' ";
+            str += "onclick='javascript:window.print()' ";
+            str += "onmouseover=\"window.status='print page'; return true;\" ";
+            str += "onmouseout=\"window.status=''\">";
+            str += "</td>";
+            str += "</tr></table>";
+          }
+          else {
+            str += "<table width='90%' align='center'>";
+            str += "<tr><td align='left'><a href='javascript:parent.leftnav.showEqnAll()'>back to top</a>";
+            str += "</td>";
+            str += "<td align='right'>";
+            str += "<a href='javascript:window.print()'>";
+            str += "print page</a>";
+            str += "</td>";
+            str += "</tr></table>";
+          }
+
+          str += "</span></form>";
+          str += "</body></html>";
+          return str;
+        }
+      
+    </script>
+</head></html>

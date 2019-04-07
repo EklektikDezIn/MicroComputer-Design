@@ -1,0 +1,767 @@
+ 
+cpldfit:  version P.68d                             Xilinx Inc.
+                                  Fitter Report
+Design Name: Main_Code                           Date:  4-17-2018,  9:02PM
+Device Used: XC9572-7-PC84
+Fitting Status: Successful
+
+*************************  Mapped Resource Summary  **************************
+
+Macrocells     Product Terms    Function Block   Registers      Pins           
+Used/Tot       Used/Tot         Inps Used/Tot    Used/Tot       Used/Tot       
+43 /72  ( 60%) 68  /360  ( 19%) 69 /144 ( 48%)   34 /72  ( 47%) 36 /69  ( 52%)
+
+** Function Block Resources **
+
+Function    Mcells      FB Inps     Signals     Pterms      IO          
+Block       Used/Tot    Used/Tot    Used        Used/Tot    Used/Tot    
+FB1          16/18       31/36       31          37/90      10/18
+FB2          15/18       22/36       22          21/90       3/17
+FB3           7/18        8/36        8           7/90       7/17
+FB4           5/18        8/36        8           3/90       5/17
+             -----       -----                   -----       -----     
+             43/72       69/144                  68/360     25/69 
+
+* - Resource is exhausted
+
+** Global Control Resources **
+
+Signal 'CPLD_CLK' mapped onto global clock net GCK1.
+Global output enable net(s) unused.
+Global set/reset net(s) unused.
+
+** Pin Resources **
+
+Signal Type    Required     Mapped  |  Pin Type            Used    Total 
+------------------------------------|------------------------------------
+Input         :   10          10    |  I/O              :    34      63
+Output        :   24          24    |  GCK/IO           :     2       3
+Bidirectional :    1           1    |  GTS/IO           :     0       2
+GCK           :    1           1    |  GSR/IO           :     0       1
+GTS           :    0           0    |
+GSR           :    0           0    |
+                 ----        ----
+        Total     36          36
+
+** Power Data **
+
+There are 43 macrocells in high performance mode (MCHP).
+There are 0 macrocells in low power mode (MCLP).
+End of Mapped Resource Summary
+**************************  Errors and Warnings  ***************************
+
+WARNING:Cpld - Unable to retrieve the path to the iSE Project Repository. Will
+   use the default filename of 'Main_Code.ise'.
+INFO:Cpld - Inferring BUFG constraint for signal 'CPLD_CLK' based upon the LOC
+   constraint 'P9'. It is recommended that you declare this BUFG explicitedly in
+   your design. Note that for certain device families the output of a BUFG
+   constraint can not drive a gated clock, and the BUFG constraint will be
+   ignored.
+WARNING:Cpld:936 - The output buffer 'ROM_L_Input_OBUF' is missing an input and
+   will be deleted.
+WARNING:Cpld:936 - The output buffer 'ROM_H_Input_OBUF' is missing an input and
+   will be deleted.
+WARNING:Cpld:1007 - Removing unused input(s) 'CPU_Bus_Grant'.  The input(s) are
+   unused after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CPU_Enable'.  The input(s) are
+   unused after optimization. Please verify functionality via simulation.
+WARNING:Cpld:1007 - Removing unused input(s) 'CPU_Valid_Memory_Add'.  The
+   input(s) are unused after optimization. Please verify functionality via
+   simulation.
+*************************  Summary of Mapped Logic  ************************
+
+** 25 Outputs **
+
+Signal                Total Total Loc     Pin  Pin     Pin     Pwr  Slew Reg Init
+Name                  Pts   Inps          No.  Type    Use     Mode Rate State
+LED<3>                1     1     FB1_1   4    I/O     O       STD  FAST 
+LED<0>                1     1     FB1_2   1    I/O     O       STD  FAST 
+ROM_H_Output          1     7     FB1_3   6    I/O     O       STD  FAST RESET
+LED<1>                2     7     FB1_5   2    I/O     O       STD  FAST RESET
+LED<2>                6     9     FB1_6   3    I/O     O       STD  FAST RESET
+ROM_H_Enable          1     7     FB1_8   5    I/O     O       STD  FAST RESET
+DUART_Reset           2     20    FB1_13  20   I/O     I/O     STD  FAST SET
+CPU_Clock             1     1     FB1_14  12   GCK/I/O O       STD  FAST 
+DUART_Read_Write      4     9     FB1_15  14   I/O     O       STD  FAST RESET
+DUART_Enable          2     7     FB1_18  24   I/O     O       STD  FAST RESET
+CPU_Bus_REQ           0     0     FB2_8   72   I/O     O       STD  FAST 
+CPU_Bus_Grant_ACK     0     0     FB2_10  75   I/O     O       STD  FAST 
+CPU_Data_ACK          6     9     FB2_13  80   I/O     O       STD  FAST RESET
+ROM_L_Output          1     7     FB3_7   35   I/O     O       STD  FAST RESET
+RAM_H_Output          1     7     FB3_10  40   I/O     O       STD  FAST RESET
+ROM_L_Enable          1     7     FB3_11  33   I/O     O       STD  FAST RESET
+RAM_H_Input           1     7     FB3_12  41   I/O     O       STD  FAST RESET
+RAM_L_Enable          1     6     FB3_13  43   I/O     O       STD  FAST RESET
+RAM_L_Output          1     7     FB3_16  45   I/O     O       STD  FAST RESET
+RAM_H_Enable          1     6     FB3_17  39   I/O     O       STD  FAST RESET
+CPU_Bus_ERR           0     0     FB4_1   46   I/O     O       STD  FAST 
+RAM_L_Input           1     7     FB4_2   44   I/O     O       STD  FAST RESET
+CPU_Reset             1     1     FB4_3   51   I/O     O       STD  FAST 
+CPU_Valid_Periph_Add  0     0     FB4_5   47   I/O     O       STD  FAST 
+CPU_Halt              1     1     FB4_11  53   I/O     O       STD  FAST 
+
+** 18 Buried Nodes **
+
+Signal                Total Total Loc     Pwr  Reg Init
+Name                  Pts   Inps          Mode State
+I_Count2<2>           1     15    FB1_9   STD  RESET
+I_Count2<4>           2     18    FB1_10  STD  RESET
+I_Count2<3>           2     18    FB1_11  STD  RESET
+I_Count1<12>          2     13    FB1_12  STD  RESET
+I_Count2<1>           4     18    FB1_16  STD  RESET
+I_Count2<0>           5     18    FB1_17  STD  SET
+I_Count1<9>           1     9     FB2_4   STD  RESET
+I_Count1<6>           1     6     FB2_5   STD  RESET
+I_Count1<5>           1     5     FB2_6   STD  RESET
+I_Count1<3>           1     3     FB2_7   STD  RESET
+I_Count1<1>           1     1     FB2_9   STD  RESET
+I_Count1<11>          1     11    FB2_11  STD  RESET
+I_Count1<10>          1     10    FB2_12  STD  RESET
+I_Count1<0>           0     0     FB2_14  STD  SET
+I_Count1<8>           2     13    FB2_15  STD  RESET
+I_Count1<7>           2     13    FB2_16  STD  RESET
+I_Count1<4>           2     13    FB2_17  STD  RESET
+I_Count1<2>           2     13    FB2_18  STD  RESET
+
+** 11 Inputs **
+
+Signal                Loc     Pin  Pin     Pin     
+Name                          No.  Type    Use     
+CPLD_Button           FB1_7   11   I/O     I
+CPLD_CLK              FB1_9   9    GCK/I/O GCK/I
+DUART_Data_ACK        FB1_12  18   I/O     I
+ADDR<2>               FB2_4   68   I/O     I
+ADDR<3>               FB2_5   70   I/O     I
+CPU_Read_Write        FB2_14  81   I/O     I
+CPU_H_Data_Ready      FB2_15  83   I/O     I
+CPU_L_Data_Ready      FB2_16  82   I/O     I
+CPU_Add_Valid         FB2_17  84   I/O     I
+ADDR<0>               FB4_6   54   I/O     I
+ADDR<1>               FB4_17  66   I/O     I
+
+Legend:
+Pin No. - ~ - User Assigned
+**************************  Function Block Details  ************************
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Imp Pt       - Product terms imported from other macrocells
+Exp Pt       - Product terms exported to other macrocells
+               in direction shown
+Unused Pt    - Unused local product terms remaining in macrocell
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global Clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+X(@)         - Signal used as input (wire-AND input) to the macrocell logic.
+               The number of Signals Used may exceed the number of FB Inputs
+               Used due to wire-ANDing in the switch matrix.
+Pin No.      - ~  - User Assigned
+*********************************** FB1  ***********************************
+Number of function block inputs used/remaining:               31/5
+Number of signals used by logic mapping into function block:  31
+Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
+Name                Pt      Pt    Pt  Pt               #    Type    Use
+LED<3>                1       0     0   4     FB1_1   4     I/O     O
+LED<0>                1       0     0   4     FB1_2   1     I/O     O
+ROM_H_Output          1       0     0   4     FB1_3   6     I/O     O
+(unused)              0       0     0   5     FB1_4   7     I/O     
+LED<1>                2       0   \/1   2     FB1_5   2     I/O     O
+LED<2>                6       1<-   0   0     FB1_6   3     I/O     O
+(unused)              0       0     0   5     FB1_7   11    I/O     I
+ROM_H_Enable          1       0     0   4     FB1_8   5     I/O     O
+I_Count2<2>           1       0     0   4     FB1_9   9     GCK/I/O GCK/I
+I_Count2<4>           2       0     0   3     FB1_10  13    I/O     (b)
+I_Count2<3>           2       0     0   3     FB1_11  10    GCK/I/O (b)
+I_Count1<12>          2       0     0   3     FB1_12  18    I/O     I
+DUART_Reset           2       0     0   3     FB1_13  20    I/O     I/O
+CPU_Clock             1       0     0   4     FB1_14  12    GCK/I/O O
+DUART_Read_Write      4       0     0   1     FB1_15  14    I/O     O
+I_Count2<1>           4       0     0   1     FB1_16  23    I/O     (b)
+I_Count2<0>           5       0     0   0     FB1_17  15    I/O     (b)
+DUART_Enable          2       0     0   3     FB1_18  24    I/O     O
+
+Signals Used by Logic in Function Block
+  1: ADDR<0>                     12: I_Count1<0>        22: I_Count1<7> 
+  2: ADDR<1>                     13: I_Count1<10>       23: I_Count1<8> 
+  3: ADDR<2>                     14: I_Count1<11>       24: I_Count1<9> 
+  4: ADDR<3>                     15: I_Count1<12>.LFBK  25: I_Count2<0>.LFBK 
+  5: CPLD_Button                 16: I_Count1<1>        26: I_Count2<1>.LFBK 
+  6: CPLD_CLK                    17: I_Count1<2>        27: I_Count2<2>.LFBK 
+  7: CPU_H_Data_Ready            18: I_Count1<3>        28: I_Count2<3>.LFBK 
+  8: CPU_L_Data_Ready            19: I_Count1<4>        29: I_Count2<4>.LFBK 
+  9: DUART_Data_ACK              20: I_Count1<5>        30: CPU_Read_Write 
+ 10: DUART_Read_Write_OBUF.LFBK  21: I_Count1<6>        31: CPU_Add_Valid 
+ 11: DUART_Reset_OBUF.LFBK      
+
+Signal                        1         2         3         4 Signals FB
+Name                0----+----0----+----0----+----0----+----0 Used    Inputs
+LED<3>               ..............................X......... 1       1
+LED<0>               .............................X.......... 1       1
+ROM_H_Output         XXXX..X......................XX......... 7       7
+LED<1>               XXXX..XX......................X......... 7       7
+LED<2>               XXXX..XXX....................XX......... 9       9
+ROM_H_Enable         XXXX..X......................XX......... 7       7
+I_Count2<2>          ...........XXXXXXXXXXXXXXX.............. 15      15
+I_Count2<4>          ...........XXXXXXXXXXXXXXXXXX........... 18      18
+I_Count2<3>          ...........XXXXXXXXXXXXXXXXXX........... 18      18
+I_Count1<12>         ...........XXXXXXXXXXXXX................ 13      13
+DUART_Reset          ....X.....XXXXXXXXXXXXXXXXXXX........... 20      20
+CPU_Clock            .....X.................................. 1       1
+DUART_Read_Write     XXXX..XX.X...................XX......... 9       9
+I_Count2<1>          ...........XXXXXXXXXXXXXXXXXX........... 18      18
+I_Count2<0>          ...........XXXXXXXXXXXXXXXXXX........... 18      18
+DUART_Enable         XXXX..XX......................X......... 7       7
+                    0----+----1----+----2----+----3----+----4
+                              0         0         0         0
+*********************************** FB2  ***********************************
+Number of function block inputs used/remaining:               22/14
+Number of signals used by logic mapping into function block:  22
+Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
+Name                Pt      Pt    Pt  Pt               #    Type    Use
+(unused)              0       0     0   5     FB2_1   63    I/O     
+(unused)              0       0     0   5     FB2_2   69    I/O     
+(unused)              0       0     0   5     FB2_3   67    I/O     
+I_Count1<9>           1       0     0   4     FB2_4   68    I/O     I
+I_Count1<6>           1       0     0   4     FB2_5   70    I/O     I
+I_Count1<5>           1       0     0   4     FB2_6   71    I/O     (b)
+I_Count1<3>           1       0     0   4     FB2_7   76    GTS/I/O (b)
+CPU_Bus_REQ           0       0     0   5     FB2_8   72    I/O     O
+I_Count1<1>           1       0     0   4     FB2_9   74    GSR/I/O (b)
+CPU_Bus_Grant_ACK     0       0     0   5     FB2_10  75    I/O     O
+I_Count1<11>          1       0     0   4     FB2_11  77    GTS/I/O (b)
+I_Count1<10>          1       0   \/1   3     FB2_12  79    I/O     (b)
+CPU_Data_ACK          6       1<-   0   0     FB2_13  80    I/O     O
+I_Count1<0>           0       0     0   5     FB2_14  81    I/O     I
+I_Count1<8>           2       0     0   3     FB2_15  83    I/O     I
+I_Count1<7>           2       0     0   3     FB2_16  82    I/O     I
+I_Count1<4>           2       0     0   3     FB2_17  84    I/O     I
+I_Count1<2>           2       0     0   3     FB2_18        (b)     (b)
+
+Signals Used by Logic in Function Block
+  1: ADDR<0>            9: I_Count1<10>.LFBK  16: I_Count1<5>.LFBK 
+  2: ADDR<1>           10: I_Count1<11>.LFBK  17: I_Count1<6>.LFBK 
+  3: ADDR<2>           11: I_Count1<12>       18: I_Count1<7>.LFBK 
+  4: ADDR<3>           12: I_Count1<1>.LFBK   19: I_Count1<8>.LFBK 
+  5: CPU_H_Data_Ready  13: I_Count1<2>.LFBK   20: I_Count1<9>.LFBK 
+  6: CPU_L_Data_Ready  14: I_Count1<3>.LFBK   21: CPU_Read_Write 
+  7: DUART_Data_ACK    15: I_Count1<4>.LFBK   22: CPU_Add_Valid 
+  8: I_Count1<0>.LFBK 
+
+Signal                        1         2         3         4 Signals FB
+Name                0----+----0----+----0----+----0----+----0 Used    Inputs
+I_Count1<9>          .......X...XXXXXXXX..................... 9       9
+I_Count1<6>          .......X...XXXXX........................ 6       6
+I_Count1<5>          .......X...XXXX......................... 5       5
+I_Count1<3>          .......X...XX........................... 3       3
+CPU_Bus_REQ          ........................................ 0       0
+I_Count1<1>          .......X................................ 1       1
+CPU_Bus_Grant_ACK    ........................................ 0       0
+I_Count1<11>         .......XX..XXXXXXXXX.................... 11      11
+I_Count1<10>         .......X...XXXXXXXXX.................... 10      10
+CPU_Data_ACK         XXXXXXX.............XX.................. 9       9
+I_Count1<0>          ........................................ 0       0
+I_Count1<8>          .......XXXXXXXXXXXXX.................... 13      13
+I_Count1<7>          .......XXXXXXXXXXXXX.................... 13      13
+I_Count1<4>          .......XXXXXXXXXXXXX.................... 13      13
+I_Count1<2>          .......XXXXXXXXXXXXX.................... 13      13
+                    0----+----1----+----2----+----3----+----4
+                              0         0         0         0
+*********************************** FB3  ***********************************
+Number of function block inputs used/remaining:               8/28
+Number of signals used by logic mapping into function block:  8
+Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
+Name                Pt      Pt    Pt  Pt               #    Type    Use
+(unused)              0       0     0   5     FB3_1   25    I/O     
+(unused)              0       0     0   5     FB3_2   17    I/O     
+(unused)              0       0     0   5     FB3_3   31    I/O     
+(unused)              0       0     0   5     FB3_4   32    I/O     
+(unused)              0       0     0   5     FB3_5   19    I/O     
+(unused)              0       0     0   5     FB3_6   34    I/O     
+ROM_L_Output          1       0     0   4     FB3_7   35    I/O     O
+(unused)              0       0     0   5     FB3_8   21    I/O     
+(unused)              0       0     0   5     FB3_9   26    I/O     
+RAM_H_Output          1       0     0   4     FB3_10  40    I/O     O
+ROM_L_Enable          1       0     0   4     FB3_11  33    I/O     O
+RAM_H_Input           1       0     0   4     FB3_12  41    I/O     O
+RAM_L_Enable          1       0     0   4     FB3_13  43    I/O     O
+(unused)              0       0     0   5     FB3_14  36    I/O     
+(unused)              0       0     0   5     FB3_15  37    I/O     
+RAM_L_Output          1       0     0   4     FB3_16  45    I/O     O
+RAM_H_Enable          1       0     0   4     FB3_17  39    I/O     O
+(unused)              0       0     0   5     FB3_18        (b)     
+
+Signals Used by Logic in Function Block
+  1: ADDR<0>            4: ADDR<3>            7: CPU_Read_Write 
+  2: ADDR<1>            5: CPU_H_Data_Ready   8: CPU_Add_Valid 
+  3: ADDR<2>            6: CPU_L_Data_Ready 
+
+Signal                        1         2         3         4 Signals FB
+Name                0----+----0----+----0----+----0----+----0 Used    Inputs
+ROM_L_Output         XXXX.XXX................................ 7       7
+RAM_H_Output         XXXXX.XX................................ 7       7
+ROM_L_Enable         XXXX.XXX................................ 7       7
+RAM_H_Input          XXXXX.XX................................ 7       7
+RAM_L_Enable         XXXX.X.X................................ 6       6
+RAM_L_Output         XXXX.XXX................................ 7       7
+RAM_H_Enable         XXXXX..X................................ 6       6
+                    0----+----1----+----2----+----3----+----4
+                              0         0         0         0
+*********************************** FB4  ***********************************
+Number of function block inputs used/remaining:               8/28
+Number of signals used by logic mapping into function block:  8
+Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
+Name                Pt      Pt    Pt  Pt               #    Type    Use
+CPU_Bus_ERR           0       0     0   5     FB4_1   46    I/O     O
+RAM_L_Input           1       0     0   4     FB4_2   44    I/O     O
+CPU_Reset             1       0     0   4     FB4_3   51    I/O     O
+(unused)              0       0     0   5     FB4_4   52    I/O     
+CPU_Valid_Periph_Add
+                      0       0     0   5     FB4_5   47    I/O     O
+(unused)              0       0     0   5     FB4_6   54    I/O     I
+(unused)              0       0     0   5     FB4_7   55    I/O     
+(unused)              0       0     0   5     FB4_8   48    I/O     
+(unused)              0       0     0   5     FB4_9   50    I/O     
+(unused)              0       0     0   5     FB4_10  57    I/O     
+CPU_Halt              1       0     0   4     FB4_11  53    I/O     O
+(unused)              0       0     0   5     FB4_12  58    I/O     
+(unused)              0       0     0   5     FB4_13  61    I/O     
+(unused)              0       0     0   5     FB4_14  56    I/O     
+(unused)              0       0     0   5     FB4_15  65    I/O     
+(unused)              0       0     0   5     FB4_16  62    I/O     
+(unused)              0       0     0   5     FB4_17  66    I/O     I
+(unused)              0       0     0   5     FB4_18        (b)     
+
+Signals Used by Logic in Function Block
+  1: ADDR<0>            4: ADDR<3>            7: CPU_Read_Write 
+  2: ADDR<1>            5: CPU_L_Data_Ready   8: CPU_Add_Valid 
+  3: ADDR<2>            6: DUART_Reset.PIN  
+
+Signal                        1         2         3         4 Signals FB
+Name                0----+----0----+----0----+----0----+----0 Used    Inputs
+CPU_Bus_ERR          ........................................ 0       0
+RAM_L_Input          XXXXX.XX................................ 7       7
+CPU_Reset            .....X.................................. 1       1
+CPU_Valid_Periph_Add 
+                     ........................................ 0       0
+CPU_Halt             .....X.................................. 1       1
+                    0----+----1----+----2----+----3----+----4
+                              0         0         0         0
+*******************************  Equations  ********************************
+
+********** Mapped Logic **********
+
+
+CPU_Bus_ERR <= '1';
+
+
+CPU_Bus_Grant_ACK <= '1';
+
+
+CPU_Bus_REQ <= '1';
+
+
+CPU_Clock <= CPLD_CLK;
+
+FDCPE_CPU_Data_ACK: FDCPE port map (CPU_Data_ACK,CPU_Data_ACK_D,CPLD_CLK,'0','0');
+CPU_Data_ACK_D <= ((NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write)
+	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write));
+
+
+CPU_Halt_I <= '0';
+CPU_Halt <= CPU_Halt_I when CPU_Halt_OE = '1' else 'Z';
+CPU_Halt_OE <= NOT DUART_Reset.PIN;
+
+
+CPU_Reset_I <= '0';
+CPU_Reset <= CPU_Reset_I when CPU_Reset_OE = '1' else 'Z';
+CPU_Reset_OE <= NOT DUART_Reset.PIN;
+
+
+CPU_Valid_Periph_Add <= '1';
+
+FDCPE_DUART_Enable: FDCPE port map (DUART_Enable,DUART_Enable_D,CPLD_CLK,'0','0');
+DUART_Enable_D <= ((NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid));
+
+FTCPE_DUART_Read_Write: FTCPE port map (DUART_Read_Write,DUART_Read_Write_T,CPLD_CLK,'0','0');
+DUART_Read_Write_T <= ((NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write AND 
+	NOT DUART_Read_Write_OBUF.LFBK)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write AND 
+	DUART_Read_Write_OBUF.LFBK)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write AND 
+	NOT DUART_Read_Write_OBUF.LFBK)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write AND 
+	DUART_Read_Write_OBUF.LFBK));
+
+FTCPE_DUART_Reset: FTCPE port map (DUART_Reset,DUART_Reset_T,CPLD_CLK,'0','0');
+DUART_Reset_T <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND CPLD_Button AND I_Count2(0).LFBK AND 
+	I_Count1(12).LFBK AND I_Count2(3).LFBK AND I_Count2(4).LFBK AND 
+	NOT I_Count2(1).LFBK AND NOT I_Count2(2).LFBK AND NOT DUART_Reset_OBUF.LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND NOT CPLD_Button AND I_Count2(0).LFBK AND 
+	I_Count1(12).LFBK AND I_Count2(3).LFBK AND I_Count2(4).LFBK AND 
+	NOT I_Count2(1).LFBK AND NOT I_Count2(2).LFBK AND DUART_Reset_OBUF.LFBK));
+
+FTCPE_I_Count10: FTCPE port map (I_Count1(0),'1',CPLD_CLK,'0','0');
+
+FTCPE_I_Count11: FTCPE port map (I_Count1(1),I_Count1(0).LFBK,CPLD_CLK,'0','0');
+
+FTCPE_I_Count12: FTCPE port map (I_Count1(2),I_Count1_T(2),CPLD_CLK,'0','0');
+I_Count1_T(2) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK)
+	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+
+FTCPE_I_Count13: FTCPE port map (I_Count1(3),I_Count1_T(3),CPLD_CLK,'0','0');
+I_Count1_T(3) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK);
+
+FTCPE_I_Count14: FTCPE port map (I_Count1(4),I_Count1_T(4),CPLD_CLK,'0','0');
+I_Count1_T(4) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK)
+	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+
+FTCPE_I_Count15: FTCPE port map (I_Count1(5),I_Count1_T(5),CPLD_CLK,'0','0');
+I_Count1_T(5) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK);
+
+FTCPE_I_Count16: FTCPE port map (I_Count1(6),I_Count1_T(6),CPLD_CLK,'0','0');
+I_Count1_T(6) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+	I_Count1(5).LFBK);
+
+FTCPE_I_Count17: FTCPE port map (I_Count1(7),I_Count1_T(7),CPLD_CLK,'0','0');
+I_Count1_T(7) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+	I_Count1(5).LFBK AND I_Count1(6).LFBK)
+	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+
+FTCPE_I_Count18: FTCPE port map (I_Count1(8),I_Count1_T(8),CPLD_CLK,'0','0');
+I_Count1_T(8) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK)
+	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+
+FTCPE_I_Count19: FTCPE port map (I_Count1(9),I_Count1_T(9),CPLD_CLK,'0','0');
+I_Count1_T(9) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK AND 
+	I_Count1(8).LFBK);
+
+FTCPE_I_Count110: FTCPE port map (I_Count1(10),I_Count1_T(10),CPLD_CLK,'0','0');
+I_Count1_T(10) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK AND 
+	I_Count1(8).LFBK AND I_Count1(9).LFBK);
+
+FTCPE_I_Count111: FTCPE port map (I_Count1(11),I_Count1_T(11),CPLD_CLK,'0','0');
+I_Count1_T(11) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK AND 
+	I_Count1(8).LFBK AND I_Count1(9).LFBK AND I_Count1(10).LFBK);
+
+FTCPE_I_Count112: FTCPE port map (I_Count1(12),I_Count1_T(12),CPLD_CLK,'0','0');
+I_Count1_T(12) <= ((I_Count1(0) AND I_Count1(10) AND I_Count1(11) AND 
+	I_Count1(1) AND I_Count1(2) AND I_Count1(3) AND I_Count1(4) AND 
+	I_Count1(5) AND I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	I_Count1(9))
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count1(12).LFBK));
+
+FTCPE_I_Count20: FTCPE port map (I_Count2(0),I_Count2_T(0),CPLD_CLK,'0','0');
+I_Count2_T(0) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND NOT I_Count2(0).LFBK AND I_Count1(12).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count1(12).LFBK AND NOT I_Count2(3).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count1(12).LFBK AND NOT I_Count2(4).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count1(12).LFBK AND I_Count2(1).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count1(12).LFBK AND I_Count2(2).LFBK));
+
+FTCPE_I_Count21: FTCPE port map (I_Count2(1),I_Count2_T(1),CPLD_CLK,'0','0');
+I_Count2_T(1) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	NOT I_Count2(3).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	NOT I_Count2(4).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	I_Count2(1).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	I_Count2(2).LFBK));
+
+FTCPE_I_Count22: FTCPE port map (I_Count2(2),I_Count2_T(2),CPLD_CLK,'0','0');
+I_Count2_T(2) <= (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	I_Count2(1).LFBK);
+
+FTCPE_I_Count23: FTCPE port map (I_Count2(3),I_Count2_T(3),CPLD_CLK,'0','0');
+I_Count2_T(3) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	I_Count2(1).LFBK AND I_Count2(2).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	I_Count2(3).LFBK AND I_Count2(4).LFBK AND NOT I_Count2(1).LFBK AND 
+	NOT I_Count2(2).LFBK));
+
+FTCPE_I_Count24: FTCPE port map (I_Count2(4),I_Count2_T(4),CPLD_CLK,'0','0');
+I_Count2_T(4) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	I_Count2(3).LFBK AND I_Count2(1).LFBK AND I_Count2(2).LFBK)
+	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+	I_Count2(3).LFBK AND I_Count2(4).LFBK AND NOT I_Count2(1).LFBK AND 
+	NOT I_Count2(2).LFBK));
+
+
+LED(0) <= CPU_Read_Write;
+
+FDCPE_LED1: FDCPE port map (LED(1),LED_D(1),CPLD_CLK,'0','0');
+LED_D(1) <= ((NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid));
+
+FDCPE_LED2: FDCPE port map (LED(2),LED_D(2),CPLD_CLK,'0','0');
+LED_D(2) <= ((NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write)
+	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+	OR (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write));
+
+
+LED(3) <= CPU_Add_Valid;
+
+FDCPE_RAM_H_Enable: FDCPE port map (RAM_H_Enable,RAM_H_Enable_D,CPLD_CLK,'0','0');
+RAM_H_Enable_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid);
+
+FDCPE_RAM_H_Input: FDCPE port map (RAM_H_Input,RAM_H_Input_D,CPLD_CLK,'0','0');
+RAM_H_Input_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write);
+
+FDCPE_RAM_H_Output: FDCPE port map (RAM_H_Output,RAM_H_Output_D,CPLD_CLK,'0','0');
+RAM_H_Output_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+
+FDCPE_RAM_L_Enable: FDCPE port map (RAM_L_Enable,RAM_L_Enable_D,CPLD_CLK,'0','0');
+RAM_L_Enable_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid);
+
+FDCPE_RAM_L_Input: FDCPE port map (RAM_L_Input,RAM_L_Input_D,CPLD_CLK,'0','0');
+RAM_L_Input_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write);
+
+FDCPE_RAM_L_Output: FDCPE port map (RAM_L_Output,RAM_L_Output_D,CPLD_CLK,'0','0');
+RAM_L_Output_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+
+FDCPE_ROM_H_Enable: FDCPE port map (ROM_H_Enable,ROM_H_Enable_D,CPLD_CLK,'0','0');
+ROM_H_Enable_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+
+FDCPE_ROM_H_Output: FDCPE port map (ROM_H_Output,ROM_H_Output_D,CPLD_CLK,'0','0');
+ROM_H_Output_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+
+FDCPE_ROM_L_Enable: FDCPE port map (ROM_L_Enable,ROM_L_Enable_D,CPLD_CLK,'0','0');
+ROM_L_Enable_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+
+FDCPE_ROM_L_Output: FDCPE port map (ROM_L_Output,ROM_L_Output_D,CPLD_CLK,'0','0');
+ROM_L_Output_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+
+Register Legend:
+ FDCPE (Q,D,C,CLR,PRE); 
+ FTCPE (Q,D,C,CLR,PRE); 
+ LDCP  (Q,D,G,CLR,PRE); 
+
+******************************  Device Pin Out *****************************
+
+Device : XC9572-7-PC84
+
+
+   --------------------------------------------------------------  
+  /11 10 9  8  7  6  5  4  3  2  1  84 83 82 81 80 79 78 77 76 75 \
+ | 12                                                          74 | 
+ | 13                                                          73 | 
+ | 14                                                          72 | 
+ | 15                                                          71 | 
+ | 16                                                          70 | 
+ | 17                                                          69 | 
+ | 18                                                          68 | 
+ | 19                                                          67 | 
+ | 20                                                          66 | 
+ | 21                        XC9572-7-PC84                     65 | 
+ | 22                                                          64 | 
+ | 23                                                          63 | 
+ | 24                                                          62 | 
+ | 25                                                          61 | 
+ | 26                                                          60 | 
+ | 27                                                          59 | 
+ | 28                                                          58 | 
+ | 29                                                          57 | 
+ | 30                                                          56 | 
+ | 31                                                          55 | 
+ | 32                                                          54 | 
+ \ 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 /
+   --------------------------------------------------------------  
+
+
+Pin Signal                         Pin Signal                        
+No. Name                           No. Name                          
+  1 LED<0>                           43 RAM_L_Enable                  
+  2 LED<1>                           44 RAM_L_Input                   
+  3 LED<2>                           45 RAM_L_Output                  
+  4 LED<3>                           46 CPU_Bus_ERR                   
+  5 ROM_H_Enable                     47 CPU_Valid_Periph_Add          
+  6 ROM_H_Output                     48 TIE                           
+  7 TIE                              49 GND                           
+  8 GND                              50 TIE                           
+  9 CPLD_CLK                         51 CPU_Reset                     
+ 10 TIE                              52 TIE                           
+ 11 CPLD_Button                      53 CPU_Halt                      
+ 12 CPU_Clock                        54 ADDR<0>                       
+ 13 TIE                              55 TIE                           
+ 14 DUART_Read_Write                 56 TIE                           
+ 15 TIE                              57 TIE                           
+ 16 GND                              58 TIE                           
+ 17 TIE                              59 TDO                           
+ 18 DUART_Data_ACK                   60 GND                           
+ 19 TIE                              61 TIE                           
+ 20 DUART_Reset                      62 TIE                           
+ 21 TIE                              63 TIE                           
+ 22 VCC                              64 VCC                           
+ 23 TIE                              65 TIE                           
+ 24 DUART_Enable                     66 ADDR<1>                       
+ 25 TIE                              67 TIE                           
+ 26 TIE                              68 ADDR<2>                       
+ 27 GND                              69 TIE                           
+ 28 TDI                              70 ADDR<3>                       
+ 29 TMS                              71 TIE                           
+ 30 TCK                              72 CPU_Bus_REQ                   
+ 31 TIE                              73 VCC                           
+ 32 TIE                              74 TIE                           
+ 33 ROM_L_Enable                     75 CPU_Bus_Grant_ACK             
+ 34 TIE                              76 TIE                           
+ 35 ROM_L_Output                     77 TIE                           
+ 36 TIE                              78 VCC                           
+ 37 TIE                              79 TIE                           
+ 38 VCC                              80 CPU_Data_ACK                  
+ 39 RAM_H_Enable                     81 CPU_Read_Write                
+ 40 RAM_H_Output                     82 CPU_L_Data_Ready              
+ 41 RAM_H_Input                      83 CPU_H_Data_Ready              
+ 42 GND                              84 CPU_Add_Valid                 
+
+
+Legend :  NC  = Not Connected, unbonded pin
+         PGND = Unused I/O configured as additional Ground pin
+         TIE  = Unused I/O floating -- must tie to VCC, GND or other signal
+         VCC  = Dedicated Power Pin
+         GND  = Dedicated Ground Pin
+         TDI  = Test Data In, JTAG pin
+         TDO  = Test Data Out, JTAG pin
+         TCK  = Test Clock, JTAG pin
+         TMS  = Test Mode Select, JTAG pin
+  PROHIBITED  = User reserved pin
+****************************  Compiler Options  ****************************
+
+Following is a list of all global compiler options used by the fitter run.
+
+Device(s) Specified                         : xc9572-7-PC84
+Optimization Method                         : SPEED
+Multi-Level Logic Optimization              : ON
+Ignore Timing Specifications                : OFF
+Default Register Power Up Value             : LOW
+Keep User Location Constraints              : ON
+What-You-See-Is-What-You-Get                : OFF
+Exhaustive Fitting                          : OFF
+Keep Unused Inputs                          : OFF
+Slew Rate                                   : FAST
+Power Mode                                  : STD
+Ground on Unused IOs                        : OFF
+Global Clock Optimization                   : ON
+Global Set/Reset Optimization               : ON
+Global Ouput Enable Optimization            : ON
+FASTConnect/UIM optimzation                 : ON
+Local Feedback                              : ON
+Pin Feedback                                : ON
+Input Limit                                 : 36
+Pterm Limit                                 : 25

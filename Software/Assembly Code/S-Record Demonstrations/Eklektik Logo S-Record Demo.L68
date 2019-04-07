@@ -1,0 +1,149 @@
+00F03004 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 4/20/2018 10:14:49 PM
+
+00000000                             1  *------------------ S-Record Demo -----------------------------------
+00000000                             2  * Title      : S-Record Demo
+00000000                             3  * Written by : Micah Richards
+00000000                             4  *              Eklektik Design
+00000000                             5  * Date       : 04/11/18
+00000000                             6  * Description: For S-Record Demonstration Program
+00000000                             7  *--------------------------------------------------------------------
+00000000                             8  *---- Characters ----------
+00000000  =00000008                  9  _BS         EQU     $08                     * Backspace
+00000000  =0000000D                 10  _CR         EQU     $0D                     * Carriage Return
+00000000  =00000004                 11  _EC         EQU     $04                     * End Character
+00000000  =0000000A                 12  _LF         EQU     $0A                     * Line Feed
+00000000  =00000020                 13  _SPACE      EQU     $20                     * Space
+00000000  =00000003                 14  _CTRL_C     EQU     $03                     * Ctrl-c 
+00000000                            15  
+00000000                            16  *---- Memory Locations ----
+00000000  =00F03000                 17  _MORG       EQU     $00F03000                 * Monitor origin
+00000000  =00001230                 18  _PRT_STRG   EQU     $00001230                 * Print String routine location
+00000000                            19  
+00F02100                            20              ORG     $00F02100
+00F02100                            21  *---- Strings -------------
+00F02100= 20 0D 0A                  22  _E1        DC.B    ' '                                                                              ,_CR, _LF  
+00F02103= 20 20 20 20 20 20 ...     23  _E2        DC.B    '                                     `o-'                                       ,_CR, _LF  
+00F0212D= 20 20 20 20 20 20 ...     24  _E3        DC.B    '                                     `dNmy/`'                                   ,_CR, _LF  
+00F0215B= 20 20 20 20 20 20 ...     25  _E4        DC.B    '                                      `.+ymNh+-'                                ,_CR, _LF  
+00F0218C= 20 20 20 20 20 20 ...     26  _E5        DC.B    '                         `                `:sdNms/-'                            ,_CR, _LF  
+00F021C1= 20 20 20 20 20 20 ...     27  _E6        DC.B    '                      -+s`                   `-ohNNh+:'                         ,_CR, _LF  
+00F021F9= 20 20 20 20 20 20 ...     28  _E7        DC.B    '                  `:smNd.                       `./ymNdo/'                      ,_CR, _LF  
+00F02234= 20 20 20 20 20 20 ...     29  _E8        DC.B    '               ./ymMMMh`                            `:sdNmy/-'                  ,_CR, _LF  
+00F02273= 20 20 20 20 20 20 ...     30  _E9        DC.B    '           `-odNMMMMMs`                                `-+hmNdo:'               ,_CR, _LF  
+00F022B5= 20 20 20 20 20 20 ...     31  _E10       DC.B    '        ./ymNMMMMMMMo  /oooooooooooooooooooooooooooooooo.  .:ydNmy/'            ,_CR, _LF  
+00F022FA= 20 20 20 20 60 2D ...     32  _E11       DC.B    '    `-+hmMMMMMMMMMN+  +NMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:     `-odNmh+-'        ,_CR, _LF  
+00F02343= 20 60 3A 73 64 4E ...     33  _E12       DC.B    ' `:sdNMMMMMMMMMMMN/ `sMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:         ./ymNds:.'    ,_CR, _LF  
+00F02390= 73 6D 4D 4D 4D 4D ...     34  _E13       DC.B    'smMMMMMMMMMMMMMMm:  yMMMMMMNNNNNNNNNNNNNNNNNNNNNNNNNNNNN:            .:sdNms'   ,_CR, _LF  
+00F023DE= 6D 4D 4D 4D 4D 4D ...     35  _E14       DC.B    'mMMMMMMMMMMMMMMm-  .MMMMMMm-----------------------------`               `:Mm'   ,_CR, _LF  
+00F0242C= 6D 4D 4D 4D 4D 4D ...     36  _E15       DC.B    'mMMMMMMMMMMMMMd.   -MMMMMMm                                              `Mm'   ,_CR, _LF  
+00F0247A= 6D 4D 4D 4D 4D 4D ...     37  _E16       DC.B    'mMMMMMMMMMMMMy`    -MMMMMMm                                              `Mm'   ,_CR, _LF  
+00F024C8= 6D 4D 4D 4D 4D 4D ...     38  _E17       DC.B    'mMMMMMMMMMMMs`     -MMMMMMm                                              `Mm'   ,_CR, _LF  
+00F02516= 6D 4D 4D 4D 4D 4D ...     39  _E18       DC.B    'mMMMMMMMMMMo       -MMMMMMm                                              `Mm'   ,_CR, _LF  
+00F02564= 6D 4D 4D 4D 4D 4D ...     40  _E19       DC.B    'mMMMMMMMMN+        -MMMMMMm                                              `Mm'   ,_CR, _LF  
+00F025B2= 6D 4D 4D 4D 4D 4D ...     41  _E20       DC.B    'mMMMMMMMN:         -MMMMMMm                                              `Mm'   ,_CR, _LF  
+00F02600= 6D 4D 4D 4D 4D 4D ...     42  _E21       DC.B    'mMMMMMMN-          -MMMMMMm                                              `Mm'   ,_CR, _LF  
+00F0264E= 6D 4D 4D 4D 4D 4D ...     43  _E22       DC.B    'mMMMMMm.           :MMMMMMm                                              :Mm'   ,_CR, _LF  
+00F0269C= 6D 4D 4D 4D 4D 64 ...     44  _E23       DC.B    'mMMMMd`            :MMMMMMMNNNNNNNNNNNNNNNNNNNNNNNN                     /MMm'   ,_CR, _LF  
+00F026EA= 6D 4D 4D 4D 68 60 ...     45  _E24       DC.B    'mMMMh`             :MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                    oMMMm'   ,_CR, _LF  
+00F02738= 6D 4D 4D 73 20 20 ...     46  _E25       DC.B    'mMMs               :MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                   sMMMMm'   ,_CR, _LF  
+00F02786= 6D 4D 6F 20 20 20 ...     47  _E26       DC.B    'mMo                :MMMMMMNhhhhhhhhhhhhhhhhhhhhhhhh                 `hMMMMMm'   ,_CR, _LF  
+00F027D4= 6D 4D 60 20 20 20 ...     48  _E27       DC.B    'mM`                :MMMMMMd                                        `dMMMMMMm'   ,_CR, _LF  
+00F02822= 6D 4D 60 20 20 20 ...     49  _E28       DC.B    'mM`                :MMMMMMd                                       .mMMMMMMMm'   ,_CR, _LF  
+00F02870= 6D 4D 60 20 20 20 ...     50  _E29       DC.B    'mM`                :MMMMMMd                                      -mMMMMMMMMm'   ,_CR, _LF  
+00F028BE= 6D 4D 60 20 20 20 ...     51  _E30       DC.B    'mM`                :MMMMMMd                                     :NMMMMMMMMMm'   ,_CR, _LF  
+00F0290C= 6D 4D 60 20 20 20 ...     52  _E31       DC.B    'mM`                :MMMMMMd                                    +NMMMMMMMMMMm'   ,_CR, _LF  
+00F0295A= 6D 4D 60 20 20 20 ...     53  _E32       DC.B    'mM`                :MMMMMMd                                   oMMMMMMMMMMMMm'   ,_CR, _LF  
+00F029A8= 6D 4D 60 20 20 20 ...     54  _E33       DC.B    'mM`                :MMMMMMd                                 `sMMMMMMMMMMMMMm'   ,_CR, _LF  
+00F029F6= 6D 4D 60 20 20 20 ...     55  _E34       DC.B    'mM`                /MMMMMMd-----------------------------`  `yMMMMMMMMMMMMMMm'   ,_CR, _LF  
+00F02A44= 64 4D 6D 73 3A 2E ...     56  _E35       DC.B    'dMms:.             /MMMMMMMNNNNNNNNNNNNNNNNNNNNNNNNNNNNs  .dMMMMMMMMMMMMMMMh'   ,_CR, _LF  
+00F02A92= 60 3A 73 64 4E 6D ...     57  _E36       DC.B    '`:sdNmh+-`         /MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMs` -mMMMMMMMMMMMMNdo-`'   ,_CR, _LF  
+00F02AE0= 20 20 20 60 2D 2B ...     58  _E37       DC.B    '   `-+hmNdo:`      /MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMo  :mMMMMMMMMMMmy/.'       ,_CR, _LF  
+00F02B2A= 20 20 20 20 20 20 ...     59  _E38       DC.B    '       .:sdNmy/.   -ssssssssssssssssssssssssssssssss/  /NMMMMMMMNds:.'          ,_CR, _LF  
+00F02B71= 20 20 20 20 20 20 ...     60  _E39       DC.B    '          `-+hNNh+-`                                  +NMMMMMmh+-`'             ,_CR, _LF  
+00F02BB5= 20 20 20 20 20 20 ...     61  _E40       DC.B    '             `./ymNds:.                              oMMMNmy/.'                 ,_CR, _LF  
+00F02BF5= 20 20 20 20 20 20 ...     62  _E41       DC.B    '                 `:odNmy+.`                        `sMNdo:`'                    ,_CR, _LF  
+00F02C32= 20 20 20 20 20 20 ...     63  _E42       DC.B    '                   ``./ymNdo-`                    `sh+-'                        ,_CR, _LF  
+00F02C6B= 20 20 20 20 20 20 ...     64  _E43       DC.B    '                        `:sdNmy/`                 ``'                           ,_CR, _LF  
+00F02CA1= 20 20 20 20 20 20 ...     65  _E44       DC.B    '                            -+hNNh+.`'                                          ,_CR, _LF  
+00F02CC8= 20 20 20 20 20 20 ...     66  _E45       DC.B    '                               `:smNds'                                         ,_CR, _LF  
+00F02CF0= 20 20 20 20 20 20 ...     67  _E46       DC.B    '                                   -+h.'                                        ,_CR, _LF,  0
+00F02D1A                            68  
+00F02D1A                            69  *------------------ Functions ---------------------------------------
+00F02D1A                            70  
+00F02D1A                            71  *------------------ Main Code ---------------------------------------
+00F02D1A                            72  * Purpose: Prints the Eklektik Design Logo
+00F02D1A                            73  *
+00F02D1A                            74  *--------------------------------------------------------------------
+00F03000                            75              ORG     _MORG                   * Hard Reset
+00F03000= 00F03004                  76              DC.L    START
+00F03004                            77              
+00F03004  49F9 00F02100             78  START       LEA     _E1,    A4
+00F0300A  4EB8 1230                 79              JSR     _PRT_STRG
+00F0300E  4E75                      80              RTS
+00F03010  FFFF FFFF                 81              SIMHALT                             * Halt simulator
+00F03014                            82              END     START                   * last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+START               F03004
+_BS                 8
+_CR                 D
+_CTRL_C             3
+_E1                 F02100
+_E10                F022B5
+_E11                F022FA
+_E12                F02343
+_E13                F02390
+_E14                F023DE
+_E15                F0242C
+_E16                F0247A
+_E17                F024C8
+_E18                F02516
+_E19                F02564
+_E2                 F02103
+_E20                F025B2
+_E21                F02600
+_E22                F0264E
+_E23                F0269C
+_E24                F026EA
+_E25                F02738
+_E26                F02786
+_E27                F027D4
+_E28                F02822
+_E29                F02870
+_E3                 F0212D
+_E30                F028BE
+_E31                F0290C
+_E32                F0295A
+_E33                F029A8
+_E34                F029F6
+_E35                F02A44
+_E36                F02A92
+_E37                F02AE0
+_E38                F02B2A
+_E39                F02B71
+_E4                 F0215B
+_E40                F02BB5
+_E41                F02BF5
+_E42                F02C32
+_E43                F02C6B
+_E44                F02CA1
+_E45                F02CC8
+_E46                F02CF0
+_E5                 F0218C
+_E6                 F021C1
+_E7                 F021F9
+_E8                 F02234
+_E9                 F02273
+_EC                 4
+_LF                 A
+_MORG               F03000
+_PRT_STRG           1230
+_SPACE              20

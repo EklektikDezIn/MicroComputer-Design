@@ -1,0 +1,45 @@
+00000100 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 4/10/2018 4:38:39 PM
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Program    : Test Loop
+00000000                             3  * Written by : Instructor
+00000000                             4  * Date       : 2010
+00000000                             5  * Description: Testing RAM with a subroutine jump. To jump
+00000000                             6  *              to a subroutine, the PC and SR are pushed onto
+00000000                             7  *              the stack which is a location in RAM. If the
+00000000                             8  *              program continually loops, the RAM is working
+00000000                             9  *-----------------------------------------------------------
+00000000                            10  
+00000000                            11  
+00000000                            12  
+00000000  =00F00800                 13  SUPER_STACK     EQU     $F00800 ; MUST BE A VALID RAM LOCATION
+00000000                            14  
+00000000                            15  
+00000000                            16  START       ORG     $000000
+00000000= 00F00800                  17              DC.L    SUPER_STACK
+00000004= 00000100                  18              DC.L    MAIN
+00000008                            19  
+00000100                            20              ORG     $000100        
+00000100  4EB9 0000010A             21  MAIN        JSR RAM_TEST
+00000106  4EF8 0100                 22              JMP MAIN
+0000010A                            23          
+0000010A  4E71                      24  RAM_TEST    NOP
+0000010C  4E71                      25              NOP
+0000010E  4E71                      26              NOP
+00000110  4E75                      27              RTS
+00000112                            28  
+00000112                            29              END     MAIN
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+MAIN                100
+RAM_TEST            10A
+START               0
+SUPER_STACK         F00800

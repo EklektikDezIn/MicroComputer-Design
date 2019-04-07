@@ -1,0 +1,317 @@
+<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>
+<h3 align='center'>Equations</h3>
+<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>
+<tr><td>
+</td></tr><tr><td>
+********** Mapped Logic **********
+</td></tr><tr><td>
+</td></tr><tr><td>
+CPU_Bus_ERR <= '1';
+</td></tr><tr><td>
+</td></tr><tr><td>
+CPU_Bus_Grant_ACK <= '1';
+</td></tr><tr><td>
+</td></tr><tr><td>
+CPU_Bus_REQ <= '1';
+</td></tr><tr><td>
+</td></tr><tr><td>
+CPU_Clock <= CPLD_CLK;
+</td></tr><tr><td>
+FDCPE_CPU_Data_ACK: FDCPE port map (CPU_Data_ACK,CPU_Data_ACK_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CPU_Data_ACK_D <= ((NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write));
+</td></tr><tr><td>
+</td></tr><tr><td>
+CPU_Halt_I <= '0';
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CPU_Halt <= CPU_Halt_I when CPU_Halt_OE = '1' else 'Z';
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CPU_Halt_OE <= NOT DUART_Reset.PIN;
+</td></tr><tr><td>
+</td></tr><tr><td>
+CPU_Reset_I <= '0';
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CPU_Reset <= CPU_Reset_I when CPU_Reset_OE = '1' else 'Z';
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CPU_Reset_OE <= NOT DUART_Reset.PIN;
+</td></tr><tr><td>
+</td></tr><tr><td>
+CPU_Valid_Periph_Add <= '1';
+</td></tr><tr><td>
+FDCPE_DUART_Enable: FDCPE port map (DUART_Enable,DUART_Enable_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUART_Enable_D <= ((NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid));
+</td></tr><tr><td>
+FTCPE_DUART_Read_Write: FTCPE port map (DUART_Read_Write,DUART_Read_Write_T,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUART_Read_Write_T <= ((NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT DUART_Read_Write_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DUART_Read_Write_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT DUART_Read_Write_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	DUART_Read_Write_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_DUART_Reset: FTCPE port map (DUART_Reset,DUART_Reset_T,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUART_Reset_T <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND CPLD_Button AND I_Count2(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(12).LFBK AND I_Count2(3).LFBK AND I_Count2(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count2(1).LFBK AND NOT I_Count2(2).LFBK AND NOT DUART_Reset_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND NOT CPLD_Button AND I_Count2(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(12).LFBK AND I_Count2(3).LFBK AND I_Count2(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count2(1).LFBK AND NOT I_Count2(2).LFBK AND DUART_Reset_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count10: FTCPE port map (I_Count1(0),'1',CPLD_CLK,'0','0');
+</td></tr><tr><td>
+FTCPE_I_Count11: FTCPE port map (I_Count1(1),I_Count1(0).LFBK,CPLD_CLK,'0','0');
+</td></tr><tr><td>
+FTCPE_I_Count12: FTCPE port map (I_Count1(2),I_Count1_T(2),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(2) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count13: FTCPE port map (I_Count1(3),I_Count1_T(3),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(3) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK);
+</td></tr><tr><td>
+FTCPE_I_Count14: FTCPE port map (I_Count1(4),I_Count1_T(4),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(4) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count15: FTCPE port map (I_Count1(5),I_Count1_T(5),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(5) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK);
+</td></tr><tr><td>
+FTCPE_I_Count16: FTCPE port map (I_Count1(6),I_Count1_T(6),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(6) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(5).LFBK);
+</td></tr><tr><td>
+FTCPE_I_Count17: FTCPE port map (I_Count1(7),I_Count1_T(7),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(7) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(5).LFBK AND I_Count1(6).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count18: FTCPE port map (I_Count1(8),I_Count1_T(8),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(8) <= ((I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (I_Count1(12) AND NOT I_Count1(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1).LFBK AND I_Count1(2).LFBK AND NOT I_Count1(3).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(4).LFBK AND NOT I_Count1(5).LFBK AND NOT I_Count1(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(7).LFBK AND I_Count1(8).LFBK AND NOT I_Count1(9).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(10).LFBK AND NOT I_Count1(11).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count19: FTCPE port map (I_Count1(9),I_Count1_T(9),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(9) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(8).LFBK);
+</td></tr><tr><td>
+FTCPE_I_Count110: FTCPE port map (I_Count1(10),I_Count1_T(10),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(10) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(8).LFBK AND I_Count1(9).LFBK);
+</td></tr><tr><td>
+FTCPE_I_Count111: FTCPE port map (I_Count1(11),I_Count1_T(11),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(11) <= (I_Count1(0).LFBK AND I_Count1(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(2).LFBK AND I_Count1(3).LFBK AND I_Count1(4).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(5).LFBK AND I_Count1(6).LFBK AND I_Count1(7).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(8).LFBK AND I_Count1(9).LFBK AND I_Count1(10).LFBK);
+</td></tr><tr><td>
+FTCPE_I_Count112: FTCPE port map (I_Count1(12),I_Count1_T(12),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count1_T(12) <= ((I_Count1(0) AND I_Count1(10) AND I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(1) AND I_Count1(2) AND I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(5) AND I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count1(9))
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count1(12).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count20: FTCPE port map (I_Count2(0),I_Count2_T(0),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count2_T(0) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND NOT I_Count2(0).LFBK AND I_Count1(12).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count1(12).LFBK AND NOT I_Count2(3).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count1(12).LFBK AND NOT I_Count2(4).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count1(12).LFBK AND I_Count2(1).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count1(12).LFBK AND I_Count2(2).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count21: FTCPE port map (I_Count2(1),I_Count2_T(1),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count2_T(1) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count2(3).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count2(4).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count2(1).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count2(2).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count22: FTCPE port map (I_Count2(2),I_Count2_T(2),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count2_T(2) <= (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count2(1).LFBK);
+</td></tr><tr><td>
+FTCPE_I_Count23: FTCPE port map (I_Count2(3),I_Count2_T(3),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count2_T(3) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count2(1).LFBK AND I_Count2(2).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count2(3).LFBK AND I_Count2(4).LFBK AND NOT I_Count2(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count2(2).LFBK));
+</td></tr><tr><td>
+FTCPE_I_Count24: FTCPE port map (I_Count2(4),I_Count2_T(4),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_Count2_T(4) <= ((NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count2(3).LFBK AND I_Count2(1).LFBK AND I_Count2(2).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT I_Count1(0) AND NOT I_Count1(10) AND NOT I_Count1(11) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(1) AND I_Count1(2) AND NOT I_Count1(3) AND I_Count1(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(5) AND NOT I_Count1(6) AND I_Count1(7) AND I_Count1(8) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count1(9) AND I_Count2(0).LFBK AND I_Count1(12).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_Count2(3).LFBK AND I_Count2(4).LFBK AND NOT I_Count2(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_Count2(2).LFBK));
+</td></tr><tr><td>
+</td></tr><tr><td>
+LED(0) <= CPU_Read_Write;
+</td></tr><tr><td>
+FDCPE_LED1: FDCPE port map (LED(1),LED_D(1),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(1) <= ((NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid));
+</td></tr><tr><td>
+FDCPE_LED2: FDCPE port map (LED(2),LED_D(2),CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LED_D(2) <= ((NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT DUART_Data_ACK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write));
+</td></tr><tr><td>
+</td></tr><tr><td>
+LED(3) <= CPU_Add_Valid;
+</td></tr><tr><td>
+FDCPE_RAM_H_Enable: FDCPE port map (RAM_H_Enable,RAM_H_Enable_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAM_H_Enable_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid);
+</td></tr><tr><td>
+FDCPE_RAM_H_Input: FDCPE port map (RAM_H_Input,RAM_H_Input_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAM_H_Input_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write);
+</td></tr><tr><td>
+FDCPE_RAM_H_Output: FDCPE port map (RAM_H_Output,RAM_H_Output_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAM_H_Output_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+</td></tr><tr><td>
+FDCPE_RAM_L_Enable: FDCPE port map (RAM_L_Enable,RAM_L_Enable_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAM_L_Enable_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid);
+</td></tr><tr><td>
+FDCPE_RAM_L_Input: FDCPE port map (RAM_L_Input,RAM_L_Input_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAM_L_Input_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND NOT CPU_Read_Write);
+</td></tr><tr><td>
+FDCPE_RAM_L_Output: FDCPE port map (RAM_L_Output,RAM_L_Output_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAM_L_Output_D <= (ADDR(3) AND ADDR(2) AND ADDR(1) AND ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+</td></tr><tr><td>
+FDCPE_ROM_H_Enable: FDCPE port map (ROM_H_Enable,ROM_H_Enable_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROM_H_Enable_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+</td></tr><tr><td>
+FDCPE_ROM_H_Output: FDCPE port map (ROM_H_Output,ROM_H_Output_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROM_H_Output_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_H_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+</td></tr><tr><td>
+FDCPE_ROM_L_Enable: FDCPE port map (ROM_L_Enable,ROM_L_Enable_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROM_L_Enable_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+</td></tr><tr><td>
+FDCPE_ROM_L_Output: FDCPE port map (ROM_L_Output,ROM_L_Output_D,CPLD_CLK,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROM_L_Output_D <= (NOT ADDR(3) AND NOT ADDR(2) AND NOT ADDR(1) AND NOT ADDR(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CPU_L_Data_Ready AND NOT CPU_Add_Valid AND CPU_Read_Write);
+</td></tr><tr><td>
+Register Legend:
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDCPE (Q,D,C,CLR,PRE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FTCPE (Q,D,C,CLR,PRE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDCP  (Q,D,G,CLR,PRE); 
+</td></tr><tr><td>
+</td></tr>
+</table>
+<form><span class="pgRef"><table width="90%" align="center"><tr>
+<td align="left"><input type="button" onclick="javascript:parent.leftnav.showTop()" onmouseover="window.status='goto top of page'; return true;" onmouseout="window.status=''" value="back to top"></td>
+<td align="right"><input type="button" onclick="window.print()" onmouseover="window.status='print page'; return true;" onmouseout="window.status=''" value="print page"></td>
+</tr></table></span></form>
+</body></html>

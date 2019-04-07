@@ -1,0 +1,1093 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.15.02
+Created On: 4/20/2018 10:02:02 PM
+
+00000000                             1  *------------------ Monitor Code ------------------------------------
+00000000                             2  * Title      : Monitor Code
+00000000                             3  * Written by : Micah Richards
+00000000                             4  *              Eklektik Design
+00000000                             5  * Date       : 04/02/18
+00000000                             6  * Description: Allows one to read and write from memory as well as
+00000000                             7  *               execute an S-Record
+00000000                             8  *--------------------------------------------------------------------
+00000000                             9  
+00000000                            10  *------------------ Register Usages ---------------------------------
+00000000                            11  * D0 - Passed input to function
+00000000                            12  * D1 - Output from function
+00000000                            13  * D2 - Counter
+00000000                            14  * A0 - DUART Communications
+00000000                            15  * A2 - Memory writing target address
+00000000                            16  * A4 - String pointer temporary
+00000000                            17  * A7 - Stack pointer
+00000000                            18  
+00000000                            19  *------------------ Constants ---------------------------------------
+00000000                            20  *---- Characters ----------
+00000000  =0000000D                 21  _CR         EQU     $0D                     * Carriage Return
+00000000  =0000000A                 22  _LF         EQU     $0A                     * Line Feed
+00000000                            23  
+00000000                            24  *---- DUART --------------- 
+00000000                            25  * (Note the offsets to account for no A0)
+00000000  =00300000                 26  _DUART      EQU     $00300000               * Loaded in A0 when needed, regs are offsets
+00000000  =00000001                 27  _MR1A       EQU     1                       * Mode Register1
+00000000  =00000001                 28  _MR2A       EQU     1                       * Points here after MR1A is set
+00000000  =00000003                 29  _SRA        EQU     3                       * Status Register (read)
+00000000  =00000003                 30  _CSRA       EQU     3                       * Clock Select Register
+00000000  =00000005                 31  _CRA        EQU     5                       * Command Register
+00000000  =00000007                 32  _TBA        EQU     7                       * Transfer Holding Register
+00000000  =00000007                 33  _RBA        EQU     7                       * Receive Holding Register
+00000000  =00000009                 34  _ACR        EQU     9                       * Auxiliary control register
+00000000  =00000000                 35  _RxRDY      EQU     0                       * Recieve ready bit position
+00000000  =00000002                 36  _TxRDY      EQU     2                       * Transmit ready bit position
+00000000  =000000CC                 37  _BAUD       EQU     $CC                     * Baud rate value = 19,200 baud
+00000000                            38  
+00000000                            39  *---- Memory Locations ----
+00000000  =00F0FFFF                 40  _LRAM       EQU     $00F0FFFF               * RAM origin
+00000000  =0000FFFF                 41  _LROM       EQU     $0000FFFF               * ROM origin
+00000000  =00001000                 42  _MORG       EQU     $00001000               * Monitor origin
+00000000  =00F00800                 43  _STACK      EQU     $00F00800               * Stack Pointer
+00000000                            44  
+00000000                            45  *---- Strings -------------
+00000100                            46              ORG     $00000100
+00000100= 50 6C 65 61 73 65 ...     47  _AREQ       DC.B    'Please enter a valid 2 byte address: ',                    0,  0
+00000127= 41 64 64 72 65 73 ...     48  _AACC       DC.B    'Address Accepted!',                                        0,  0
+0000013A= 54 68 65 20 6D 65 ...     49  _CONT       DC.B    'The memory contents at your selected index are: $',        0,  0
+0000016D= 0D 0A 00 00               50  _CRLF       DC.B    _CR,_LF,                                                    0,  0
+00000171= 54 68 65 20 69 6E ...     51  _ERRI       DC.B    'The input you submitted is invalid in this context.',      0,  0
+000001A6= 57 65 6C 63 6F 6D ...     52  _MENU       DC.B    'Welcome to the Eklektik Design uComputer Monitor Program', 0,  0
+000001E0= 53 65 6C 65 63 74 ...     53  _MEN2       DC.B    'Select an option below:',                                  0,  0
+000001F9= 50 6C 65 61 73 65 ...     54  _NDAT       DC.B    'Please enter the new data for this address: $',            0,  0
+00000228= 31 29 20 52 45 41 ...     55  _OPT1       DC.B    '1) READ  from ROM',                                        0,  0
+0000023B= 32 29 20 52 45 41 ...     56  _OPT2       DC.B    '2) READ  from RAM',                                        0,  0
+0000024E= 33 29 20 52 45 41 ...     57  _OPT3       DC.B    '3) READ  from Register',                                   0,  0
+00000266= 34 29 20 57 52 49 ...     58  _OPT4       DC.B    '4) WRITE to   RAM',                                        0,  0
+00000279= 35 29 20 57 52 49 ...     59  _OPT5       DC.B    '5) WRITE to   Register',                                   0,  0
+00000291= 36 29 20 57 52 49 ...     60  _OPT6       DC.B    '6) WRITE to   S-Record',                                   0,  0
+000002A9= 37 29 20 52 55 4E ...     61  _OPT7       DC.B    '7) RUN   the  S-Record',                                   0,  0
+000002C1= 45 6B 6C 65 6B 74 ...     62  _PRMT       DC.B    'Eklektik@uComp:~$ ',                                       0,  0
+000002D5= 50 6C 65 61 73 65 ...     63  _RREC       DC.B    'Please enter the S-record: ',                              0,  0
+000002F2= 50 6C 65 61 73 65 ...     64  _RREQ       DC.B    'Please select a register (A0-A7, D0-D7): ',                0,  0
+0000031D                            65  
+0000031D                            66  *------------------ Functions ---------------------------------------
+0000031D                            67  
+0000031D                            68  *------------------ Main Code ---------------------------------------
+0000031D                            69  * Purpose: Initialize the monitor program and provide an entry point
+0000031D                            70  *           for resets
+0000031D                            71  * In:  NA
+0000031D                            72  * Out: NA
+0000031D                            73  *--------------------------------------------------------------------
+00000000                            74              ORG     $00000000               * Hard Reset
+00000000= 00F00800                  75              DC.L    _STACK                  * Initialize the stack    
+00000004= 00001000                  76              DC.L    BEGIN
+00000008                            77              
+00001000                            78              ORG     _MORG
+00001000                            79              
+00001000  4EB9 000010AA             80  BEGIN       JSR     INIT_DUART
+00001006                            81  
+00001006  7000                      82  RESET       MOVE.L  #$00000000, D0          * Reset D0
+00001008  7200                      83              MOVE.L  #$00000000, D1          * Reset D1
+0000100A  287C 00000000             84              MOVE.L  #$00000000, A4          * Reset A4
+00001010  2E7C 00F00800             85              MOVE.L  #$00F00800, A7          * Reset A7
+00001016                            86  
+00001016  4EB9 000011A0             87              JSR     PRT_MENU                * Print Menu
+0000101C  4EB9 0000107A             88              JSR     GET_CHAR                * Get input
+00001022  4EB9 000016CC             89              JSR     RUN_OPT                 * Run user's selection
+00001028  4EF8 1006                 90              JMP     RESET                   * Repeat indefinitely
+0000102C                            91              
+0000102C                            92          
+0000102C                            93  *           
+0000102C                            94  *------------------ ASC_ADDR ----------------------------------------
+0000102C                            95  * Purpose: converts the lower two bytes of a register to ascii
+0000102C                            96  * In:  D0
+0000102C                            97  * Out: D1, PRT_****
+0000102C                            98  * Note: A4 overwritten
+0000102C                            99  *--------------------------------------------------------------------
+0000102C  2F02                     100  ASC_ADDR    MOVE.L  D2,         -(A7)       * Store working register
+0000102E  2F00                     101              MOVE.L  D0,         -(A7)       * Store working register
+00001030                           102  
+00001030  143C 0004                103              MOVE.B  #$04,       D2          * Initialize the counter    
+00001034                           104           
+00001034                           105  ASC_ADDR_L  
+00001034  E189                     106              LSL.L   #8,         D1          * Shift to make space for next input
+00001036  6100 0102                107              BSR     MAKE_TEX                * Try to convert the input to hex
+0000103A  E848                     108              LSR.W   #4,         D0          * Shift to make space
+0000103C  5302                     109              SUBI.B  #$01,       D2          * Decrement
+0000103E  66F4                     110              BNE     ASC_ADDR_L              * Restart loop if needed
+00001040  201F                     111              MOVE.L  (A7)+,      D0          * Restore working register
+00001042  241F                     112              MOVE.L  (A7)+,      D2          * Restore working register
+00001044  4E75                     113              RTS                             * Return 
+00001046                           114              
+00001046                           115  *------------------ GET_ADDR ----------------------------------------
+00001046                           116  * Purpose: Gets an address from the user
+00001046                           117  * In:  D0
+00001046                           118  * Out: D1, PRT_****
+00001046                           119  * Note: A4 overwritten
+00001046                           120  *--------------------------------------------------------------------
+00001046  2F00                     121  GET_ADDR    MOVE.L  D0,         -(A7)       * Store working register
+00001048  49F8 0100                122              LEA     _AREQ,      A4          * Load address prompt
+0000104C  6100 01B2                123              BSR     PRT_NWLN                * Print a new line
+00001050  6100 01DE                124              BSR     PRT_STRG                * Print string
+00001054  6100 003A                125              BSR     GET_FOUR                * Get the address to read            
+00001058  303C 0001                126              MOVE.W  #$0001,     D0          * Move 1 into D1
+0000105C  C001                     127              AND.B   D1,         D0          * Isolate last bit of D0
+0000105E  6600 0128                128              BNE     PRT_ERR                 * If address is odd, Err
+00001062                           129              
+00001062  6100 019C                130              BSR     PRT_NWLN                * Print new line
+00001066  49F8 0127                131              LEA     _AACC,      A4          * Else load address accept message
+0000106A  6100 01C4                132              BSR     PRT_STRG                * Display message
+0000106E  6100 0190                133              BSR     PRT_NWLN                * Print new line
+00001072  6100 018C                134              BSR     PRT_NWLN                * Print new line
+00001076  201F                     135              MOVE.L  (A7)+,      D0          * Restore working register
+00001078  4E75                     136              RTS                             * Return
+0000107A                           137              
+0000107A                           138  *------------------ GET_CHAR ----------------------------------------
+0000107A                           139  * Purpose: Gets a character through the serial connection and places
+0000107A                           140  *           it in D0
+0000107A                           141  * In:  IO
+0000107A                           142  * Out: D0
+0000107A                           143  *--------------------------------------------------------------------
+0000107A  41F9 00300000            144  GET_CHAR    LEA     _DUART,     A0          * A0 points to base DUART address
+00001080  1028 0003                145              MOVE.B  _SRA(A0),   D0          * Read the A status register
+00001084  0800 0000                146              BTST    #_RxRDY,    D0          * Test reciever ready status
+00001088  67F0                     147              BEQ     GET_CHAR                * UNTIL char recieved            
+0000108A  1028 0007                148              MOVE.B  _RBA(A0),   D0          * Read the character into D0
+0000108E  4E75                     149              RTS                             * Return
+00001090                           150  
+00001090                           151  *GET_CHAR    MOVE.L  D1,         -(A7)       * Save working register
+00001090                           152  *            MOVE    #5,         D0          * Store 'get single char' command
+00001090                           153  *            TRAP    #15                     * Trigger simulator action
+00001090                           154  *            MOVE    D1,         D0          * Move result into output register
+00001090                           155  *            MOVE.L  (A7)+,      D1          * Restore working register
+00001090                           156  *            RTS                             * Return
+00001090                           157  
+00001090                           158  *------------------ GET_FOUR ----------------------------------------
+00001090                           159  * Purpose: Gets a four ascii values and saves them as hex
+00001090                           160  * In:  GET_CHAR
+00001090                           161  * Out: D1
+00001090                           162  *--------------------------------------------------------------------
+00001090  2F02                     163  GET_FOUR    MOVE.L  D2,         -(A7)       * Store working register
+00001092  2F00                     164              MOVE.L  D0,         -(A7)       * Store working register
+00001094  143C 0004                165              MOVE.B  #$04, D2                * Initialize the counter
+00001098                           166                  
+00001098  E949                     167  GET_FOUR_L  LSL.W   #4,         D1          * Shift to make space for next input
+0000109A  61DE                     168              BSR     GET_CHAR                * Get the next char
+0000109C  6100 0044                169              BSR     MAKE_HEX                * Try to convert the input to hex
+000010A0  5302                     170              SUBI.B  #$01,       D2          * Decrement
+000010A2  66F4                     171              BNE     GET_FOUR_L              * Restart loop if needed
+000010A4                           172  
+000010A4  201F                     173              MOVE.L  (A7)+,      D0          * Restore working register
+000010A6  241F                     174              MOVE.L  (A7)+,      D2          * Restore working register
+000010A8                           175  
+000010A8  4E75                     176              RTS                             * Else return 
+000010AA                           177               
+000010AA                           178  *------------------ INIT_DUART --------------------------------------
+000010AA                           179  * Purpose: Initialize the DUART
+000010AA                           180  * In:  N/A
+000010AA                           181  * Out: N/A
+000010AA                           182  *--------------------------------------------------------------------
+000010AA                           183  
+000010AA  41F9 00300000            184  INIT_DUART  LEA     _DUART,     A0          * A0 points to base DUART address
+000010B0                           185  
+000010B0                           186  *---- Software Reset ------ 
+000010B0  117C 0030 0005           187              MOVE.B  #$30,       _CRA(A0)    * Reset TxA
+000010B6  117C 0020 0005           188              MOVE.B  #$20,       _CRA(A0)    * Reset RxA
+000010BC  117C 0010 0005           189              MOVE.B  #$10,       _CRA(A0)    * Reset MRA pointer
+000010C2                           190  
+000010C2                           191  *---- Initialization ------ 
+000010C2  117C 0080 0009           192              MOVE.B  #$80,       _ACR(A0)    * selects baud rate set 2
+000010C8  117C 00CC 0003           193              MOVE.B  #_BAUD,     _CSRA(A0)   * set 19.2k baud Rx/Tx
+000010CE  117C 0013 0001           194              MOVE.B  #$13,       _MR1A(A0)   * 8-bits, no parity, 1 stop bit
+000010D4                           195  
+000010D4                           196  * This is the most important register to set in the 68681 DUART.
+000010D4                           197  * 07 sets: Normal mode, CTS and RTS disabled, stop bit length = 1
+000010D4                           198  * For testing load $#47 to enable auto-echo
+000010D4  117C 0007 0001           199              MOVE.B  #$07,       _MR2A(A0)   
+000010DA                           200  
+000010DA  117C 0005 0005           201              MOVE.B  #$05,       _CRA(A0)    * enable Tx and Rx
+000010E0  4E75                     202              RTS
+000010E2                           203  
+000010E2                           204  *------------------ MAKE_HEX ----------------------------------------
+000010E2                           205  * Purpose: Converts a value to hex if is 0-9 or A-F
+000010E2                           206  * In:  D0
+000010E2                           207  * Out: D1, C Flag
+000010E2                           208  *--------------------------------------------------------------------
+000010E2                           209  *---- 0-9 ------    
+000010E2  B03C 0030                210  MAKE_HEX    CMP.B   #$30,       D0          * Compare input with $30
+000010E6  6D00 0048                211              BLT     MAKE_HEX_E              * Set error flag if less
+000010EA  B03C 0039                212              CMP.B   #$39,       D0          * Compare input with $40
+000010EE  6E00 000C                213              BGT     MAKE_HEX_2              * Check if A-F
+000010F2  0400 0030                214              SUBI.B  #$30,       D0          * Subtract $30 from input
+000010F6  4EF9 00001136            215              JMP     MAKE_HEX_X              * Jump to exit
+000010FC                           216              
+000010FC                           217  *---- A-F ------                
+000010FC  B03C 0041                218  MAKE_HEX_2  CMP.B   #$41,       D0          * Compare input with $41
+00001100  6D00 002E                219              BLT     MAKE_HEX_E              * Set error flag if less
+00001104  B03C 0046                220              CMP.B   #$46,       D0          * Compare input with $46
+00001108  6E00 000C                221              BGT     MAKE_HEX_3              * Check if a-f
+0000110C  0400 0037                222              SUBI.B  #$37,       D0          * Subtract $37 from input
+00001110  4EF9 00001136            223              JMP     MAKE_HEX_X              * Jump to exit
+00001116                           224  
+00001116                           225              
+00001116                           226  *---- a-f ------                
+00001116  B03C 0061                227  MAKE_HEX_3  CMP.B   #$61,       D0          * Compare input with $61
+0000111A  6D00 0014                228              BLT     MAKE_HEX_E              * Set error flag if less
+0000111E  B03C 0066                229              CMP.B   #$66,       D0          * Compare input with $66
+00001122  6E00 000C                230              BGT     MAKE_HEX_E              * Set error flag if greater
+00001126  0400 0057                231              SUBI.B  #$57,       D0          * Subtract $57 from input
+0000112A  4EF9 00001136            232              JMP     MAKE_HEX_X              * Jump to exit
+00001130                           233     
+00001130                           234  *---- Error ------           
+00001130  4EF9 00001188            235  MAKE_HEX_E  JMP     PRT_ERR                 * Error and reset
+00001136                           236              
+00001136                           237  
+00001136                           238  *---- Exit ------           
+00001136  8200                     239  MAKE_HEX_X  OR.B    D0,         D1          * Move results to D1
+00001138  4E75                     240              RTS                             * Return
+0000113A                           241              
+0000113A                           242  *------------------ MAKE_TEX ----------------------------------------
+0000113A                           243  * Purpose: Converts a hex value to text
+0000113A                           244  * In:  D0
+0000113A                           245  * Out: D1, C Flag
+0000113A                           246  *--------------------------------------------------------------------
+0000113A                           247  *---- 0-9 ------    
+0000113A  123C 000F                248  MAKE_TEX    MOVE.B  #$0F,       D1
+0000113E  C200                     249              AND.B   D0,         D1
+00001140  B23C 0009                250              CMP.B   #$09,       D1          * Compare input with $09
+00001144  6E00 0008                251              BGT     MAKE_TEX_2              * Check if A-F
+00001148  0601 0030                252              ADDI.B  #$30,       D1          * Add $30 to input
+0000114C  4E75                     253              RTS                             * Return
+0000114E                           254  
+0000114E                           255  *---- A-F ------                
+0000114E  B23C 000F                256  MAKE_TEX_2  CMP.B   #$0F,       D1          * Compare input with $46
+00001152  6E00 0008                257              BGT     MAKE_TEX_E              * Check if a-f
+00001156  0601 0037                258              ADDI.B  #$37,       D1          * Add $37 from input
+0000115A  4E75                     259              RTS                             * Return
+0000115C                           260  
+0000115C                           261  *---- Error ------           
+0000115C  4EF9 00001188            262  MAKE_TEX_E  JMP     PRT_ERR                 * Error and reset
+00001162                           263              
+00001162                           264  *------------------ PRT_2BYT ----------------------------------------
+00001162                           265  * Purpose: Prints the lower two bytes of a register
+00001162                           266  * In:  D1 
+00001162                           267  * Out: PRT_****
+00001162                           268  * Note: A4 overwritten
+00001162                           269  *--------------------------------------------------------------------
+00001162  2F00                     270  PRT_2BYT    MOVE.L  D0,         -(A7)       * Save working register
+00001164  2F01                     271              MOVE.L  D1,         -(A7)       * Save working register
+00001166                           272              *MOVE.L D1,         D0          * Move ouput to input
+00001166  6100 FEC4                273              BSR     ASC_ADDR                * Convert to ascii
+0000116A  2001                     274              MOVE.L  D1,         D0          * Move ouput to input
+0000116C                           275              
+0000116C  6100 00D2                276              BSR     PUT_CHAR                * Print first char
+00001170  E088                     277              LSR.L   #8,         D0          * Shift for next char
+00001172                           278              
+00001172  6100 00CC                279              BSR     PUT_CHAR                * Print second char
+00001176  E088                     280              LSR.L   #8,         D0          * Shift for next char
+00001178                           281              
+00001178  6100 00C6                282              BSR     PUT_CHAR                * Print third char
+0000117C  E088                     283              LSR.L   #8,         D0          * Shift for next char
+0000117E                           284              
+0000117E  6100 00C0                285              BSR     PUT_CHAR                * Print fourth char
+00001182                           286              
+00001182  221F                     287              MOVE.L  (A7)+,      D1          * Restore D1
+00001184  201F                     288              MOVE.L  (A7)+,      D0          * Restore D0
+00001186                           289  
+00001186  4E75                     290              RTS                             * Return     
+00001188                           291              
+00001188                           292  *------------------ PRT_ERR -----------------------------------------
+00001188                           293  * Purpose: Prints the error message
+00001188                           294  * In:  N/A
+00001188                           295  * Out: PRT_****
+00001188                           296  * Note: A4 overwritten
+00001188                           297  *--------------------------------------------------------------------        
+00001188  6100 0076                298  PRT_ERR     BSR     PRT_NWLN                * Print a new line
+0000118C  49F8 0171                299              LEA     _ERRI,      A4          * Else load error message
+00001190  6100 009E                300              BSR     PRT_STRG                * Print it
+00001194  6100 006A                301              BSR     PRT_NWLN                * Print a new line
+00001198  6100 0066                302              BSR     PRT_NWLN                * Print a new line
+0000119C  6000 FE68                303              BRA     RESET                   * Return to menu
+000011A0                           304              
+000011A0                           305  *------------------ PRT_MENU ----------------------------------------
+000011A0                           306  * Purpose: Prints the monitor menu
+000011A0                           307  * In:  N/A
+000011A0                           308  * Out: PRT_****
+000011A0                           309  * Note: A4 overwritten
+000011A0                           310  *--------------------------------------------------------------------
+000011A0  48E7 0008                311  PRT_MENU    MOVEM.L A4,         -(A7)       * Save working register
+000011A4                           312  
+000011A4  6100 005A                313              BSR     PRT_NWLN                * Print new line
+000011A8                           314              
+000011A8  49F8 01A6                315              LEA     _MENU,      A4          * Point to first menu string
+000011AC  6100 0082                316              BSR     PRT_STRG                * Print it
+000011B0  6100 004E                317              BSR     PRT_NWLN                * Print new line
+000011B4                           318              
+000011B4  49F8 01E0                319              LEA     _MEN2,      A4          * Point to second menu string
+000011B8  6176                     320              BSR.S   PRT_STRG                * Print it
+000011BA  6144                     321              BSR.S   PRT_NWLN                * Print new line
+000011BC                           322  
+000011BC  49F8 0228                323              LEA     _OPT1,      A4          * Point to first option string
+000011C0  616E                     324              BSR.S   PRT_STRG                * Print it
+000011C2  613C                     325              BSR.S   PRT_NWLN                * Print new line
+000011C4                           326  
+000011C4  49F8 023B                327              LEA     _OPT2,      A4          * Point to second option string
+000011C8  6166                     328              BSR.S   PRT_STRG                * Print it
+000011CA  6134                     329              BSR.S   PRT_NWLN                * Print new line
+000011CC                           330              
+000011CC  49F8 024E                331              LEA     _OPT3,      A4          * Point to third option string
+000011D0  615E                     332              BSR.S   PRT_STRG                * Print it
+000011D2  612C                     333              BSR.S   PRT_NWLN                * Print new line
+000011D4                           334              
+000011D4  49F8 0266                335              LEA     _OPT4,      A4          * Point to fourth option string
+000011D8  6156                     336              BSR.S   PRT_STRG                * Print it
+000011DA  6124                     337              BSR.S   PRT_NWLN                * Print new line
+000011DC                           338              
+000011DC  49F8 0279                339              LEA     _OPT5,      A4          * Point to fifth option string
+000011E0  614E                     340              BSR.S   PRT_STRG                * Print it
+000011E2  611C                     341              BSR.S   PRT_NWLN                * Print new line
+000011E4                           342  
+000011E4  49F8 0291                343              LEA     _OPT6,      A4          * Point to sixth option string
+000011E8  6146                     344              BSR.S   PRT_STRG                * Print it
+000011EA  6114                     345              BSR.S   PRT_NWLN                * Print new line
+000011EC                           346              
+000011EC  49F8 02A9                347              LEA     _OPT7,      A4          * Point to seventh option string
+000011F0  613E                     348              BSR.S   PRT_STRG                * Print it
+000011F2  610C                     349              BSR.S   PRT_NWLN                * Print new line
+000011F4                           350  
+000011F4                           351  
+000011F4  49F8 02C1                352              LEA     _PRMT,      A4          * Point to prompt string
+000011F8  6136                     353              BSR.S   PRT_STRG                * Print it
+000011FA                           354              
+000011FA  4CDF 1000                355              MOVEM.L (A7)+,      A4          * Restore working register
+000011FE  4E75                     356              RTS                             * Return
+00001200                           357  
+00001200                           358  *------------------ PRT_NWLN ----------------------------------------
+00001200                           359  * Purpose: Prints a new line through the serial connection
+00001200                           360  * In:  N/A
+00001200                           361  * Out: PRT_STRG
+00001200                           362  *--------------------------------------------------------------------
+00001200  48E7 0008                363  PRT_NWLN    MOVEM.L A4,         -(A7)       * Save working register
+00001204  49F8 016D                364              LEA     _CRLF,      A4          * Point to CR/LF string
+00001208  6126                     365              BSR.S   PRT_STRG                * Print it
+0000120A  4CDF 1000                366              MOVEM.L (A7)+,      A4          * Restore working register
+0000120E  4E75                     367              RTS                             * Return
+00001210                           368                     
+00001210                           369  *------------------ PRT_REG -----------------------------------------
+00001210                           370  * Purpose: Prints the contents of a register in ascii
+00001210                           371  * In:  D1
+00001210                           372  * Out: PRT_****
+00001210                           373  *--------------------------------------------------------------------
+00001210  2F01                     374  PRT_REG     MOVE.L  D1,         -(A7)       * Save working register
+00001212  49F8 013A                375              LEA     _CONT,      A4          * Load Memory contents message
+00001216  6100 0018                376              BSR     PRT_STRG                * Print message
+0000121A  4840                     377              SWAP    D0                      * Swap high and low
+0000121C  6100 FF44                378              BSR     PRT_2BYT                * Print the data     
+00001220  E088                     379              LSR.L   #8,         D0          * Shift upper bits down
+00001222  E088                     380              LSR.L   #8,         D0          * Shift upper bits down
+00001224  6100 FF3C                381              BSR     PRT_2BYT                * Print the data   
+00001228  61D6                     382              BSR     PRT_NWLN                * Print new line
+0000122A  61D4                     383              BSR     PRT_NWLN                * Print new line
+0000122C  221F                     384              MOVE.L  (A7)+,      D1          * Restore D1
+0000122E  4E75                     385              RTS                             * Return
+00001230                           386                  
+00001230                           387  *------------------ PRT_STRG ----------------------------------------
+00001230                           388  * Purpose: Prints a string through the serial connection
+00001230                           389  * In:  A4
+00001230                           390  * Out: PUT_CHAR
+00001230                           391  * Note: A4 Destroyed
+00001230                           392  *--------------------------------------------------------------------
+00001230  2F00                     393  PRT_STRG    MOVE.L  D0,         -(A7)       * Save working register
+00001232  101C                     394  PRT_STRG_1  MOVE.B  (A4)+,      D0          * Get character to be printed
+00001234  6706                     395              BEQ.S   PRT_STRG_2              * If null then return
+00001236  6100 0008                396              BSR     PUT_CHAR                * Else print it
+0000123A  60F6                     397              BRA     PRT_STRG_1              * Continue
+0000123C  201F                     398  PRT_STRG_2  MOVE.L  (A7)+,      D0          * Restore D0
+0000123E  4E75                     399              RTS                             * Return
+00001240                           400              
+00001240                           401  *------------------ PUT_CHAR ----------------------------------------
+00001240                           402  * Purpose: Sends a character through the serial connection
+00001240                           403  * In:  D0
+00001240                           404  * Out: IO
+00001240                           405  *--------------------------------------------------------------------
+00001240  41F9 00300000            406  PUT_CHAR    LEA     _DUART,     A0          * A0 points to base DUART address
+00001246  3F00                     407              MOVE.W  D0,         -(SP)
+00001248  1028 0003                408  PUT_CHAR_L  MOVE.B  _SRA(A0),   D0
+0000124C  0800 0002                409              BTST    #_TxRDY,    D0
+00001250  67F6                     410              BEQ     PUT_CHAR_L  
+00001252  301F                     411              MOVE.W  (SP)+,      D0
+00001254  1140 0007                412              MOVE.B  D0,         _TBA(A0)
+00001258  4E75                     413              RTS                             * Return
+0000125A                           414  
+0000125A                           415  *PUT_CHAR    MOVE.L  D0,        -(A7)        * Save working regiser
+0000125A                           416  *            MOVE.L  D1,        -(A7)        * Save working register
+0000125A                           417  *            MOVE.L  D0,         D1          * Move information to D1
+0000125A                           418  *            MOVE    #6,         D0          * Load Printchar trap routine
+0000125A                           419  *            TRAP    #15                     * Call simulator procedure
+0000125A                           420  *            MOVE.L  (A7)+,      D1          * Restore working register
+0000125A                           421  *            MOVE.L  (A7)+,      D0          * Restore working register
+0000125A                           422  *            RTS                             * Return
+0000125A                           423              
+0000125A                           424  *------------------ READ_RAM ----------------------------------------
+0000125A                           425  * Purpose: Reads data from a given RAM address
+0000125A                           426  * In:  GET_ADDR
+0000125A                           427  * Out: PRT_****
+0000125A                           428  *--------------------------------------------------------------------
+0000125A  2F00                     429  READ_RAM    MOVE.L  D0,         -(A7)       * Save working register
+0000125C  2F0A                     430              MOVE.L  A2,         -(A7)       * Save working register
+0000125E                           431              
+0000125E  6100 FDE6                432              BSR     GET_ADDR                * Get the target address
+00001262  203C 00F0FFFF            433              MOVE.L  #_LRAM,     D0          * Load first two bytes with RAM target
+00001268  C041                     434              AND.W   D1,         D0          * Set the last two bytes to specific address
+0000126A  2440                     435              MOVE.L  D0,         A2          * Move the data to the address register
+0000126C  2012                     436              MOVE.L  (A2),       D0          * Move the data from memory to D0
+0000126E                           437  
+0000126E  61A0                     438              BSR     PRT_REG                 * Print the contents            
+00001270  245F                     439              MOVE.L  (A7)+,      A2          * Restore working register 
+00001272  201F                     440              MOVE.L  (A7)+,      D0          * Restore working register 
+00001274  4E75                     441              RTS                             * Return
+00001276                           442            
+00001276                           443  *------------------ READ_REG ----------------------------------------
+00001276                           444  * Purpose: Reads data from a given register
+00001276                           445  * In:  GET_CHAR
+00001276                           446  * Out: PRT_****
+00001276                           447  *--------------------------------------------------------------------
+00001276  2F00                     448  READ_REG    MOVE.L  D0,         -(A7)       * Save working register
+00001278                           449  
+00001278  2F0C                     450              MOVE.L  A4,         -(A7)       * Save working register
+0000127A  6184                     451              BSR     PRT_NWLN                * Print new line
+0000127C  49F8 02F2                452              LEA     _RREQ,      A4          * Load register prompt
+00001280  61AE                     453              BSR     PRT_STRG                * Print message
+00001282  285F                     454              MOVE.L  (A7)+,      A4          * Restore working register
+00001284                           455              
+00001284  6100 FDF4                456              BSR     GET_CHAR                * Get the address to read
+00001288  B07C 0041                457              CMP     #$41,       D0          * Check if 'A'
+0000128C  6700 001E                458              BEQ     READ_REG_A
+00001290  B07C 0061                459              CMP     #$61,       D0          * Check if 'a'
+00001294  6700 0016                460              BEQ     READ_REG_A
+00001298                           461  
+00001298  B07C 0044                462              CMP     #$44,       D0          * Check if 'D'
+0000129C  6700 0092                463              BEQ     READ_REG_D
+000012A0  B07C 0064                464              CMP     #$64,       D0          * Check if 'd'
+000012A4  6700 008A                465              BEQ     READ_REG_D
+000012A8  4EF8 1188                466              JMP     PRT_ERR     
+000012AC                           467              
+000012AC  6100 FDCC                468  READ_REG_A  BSR     GET_CHAR                * Get the address to read
+000012B0  B03C 0030                469  READ_REG_A0 CMP.B   #$30,       D0          * Check if '0'
+000012B4  6600 000A                470              BNE     READ_REG_A1             * Jump to next test
+000012B8  2008                     471              MOVE.L  A0,         D0          * Else move A0 to D0
+000012BA  4EF9 000013BC            472              JMP     READ_REG_P              * Jump to printing
+000012C0                           473              
+000012C0  B03C 0031                474  READ_REG_A1 CMP.B   #$31,       D0          * Check if '1'
+000012C4  6600 000A                475              BNE     READ_REG_A2             * Jump to next test
+000012C8  2009                     476              MOVE.L  A1,         D0          * Else move A1 to D0
+000012CA  4EF9 000013BC            477              JMP     READ_REG_P              * Jump to printing
+000012D0                           478  
+000012D0  B03C 0032                479  READ_REG_A2 CMP.B   #$32,       D0          * Check if '0'
+000012D4  6600 000A                480              BNE     READ_REG_A3             * Jump to next test
+000012D8  200A                     481              MOVE.L  A2,         D0          * Else move A2 to D0
+000012DA  4EF9 000013BC            482              JMP     READ_REG_P              * Jump to printing
+000012E0                           483  
+000012E0  B03C 0033                484  READ_REG_A3 CMP.B   #$33,       D0          * Check if '0'
+000012E4  6600 000A                485              BNE     READ_REG_A4             * Jump to next test
+000012E8  200B                     486              MOVE.L  A3,         D0          * Else move A3 to D0
+000012EA  4EF9 000013BC            487              JMP     READ_REG_P              * Jump to printing
+000012F0                           488  
+000012F0  B03C 0034                489  READ_REG_A4 CMP.B   #$34,       D0          * Check if '0'
+000012F4  6600 000A                490              BNE     READ_REG_A5             * Jump to next test
+000012F8  200C                     491              MOVE.L  A4,         D0          * Else move A4 to D0
+000012FA  4EF9 000013BC            492              JMP     READ_REG_P              * Jump to printing
+00001300                           493  
+00001300  B03C 0035                494  READ_REG_A5 CMP.B   #$35,       D0          * Check if '0'
+00001304  6600 000A                495              BNE     READ_REG_A6             * Jump to next test
+00001308  200D                     496              MOVE.L  A5,         D0          * Else move A5 to D0
+0000130A  4EF9 000013BC            497              JMP     READ_REG_P              * Jump to printing
+00001310                           498  
+00001310  B03C 0036                499  READ_REG_A6 CMP.B   #$36,       D0          * Check if '0'
+00001314  6600 000A                500              BNE     READ_REG_A7             * Jump to next test
+00001318  200E                     501              MOVE.L  A6,         D0          * Else move A6 to D0
+0000131A  4EF9 000013BC            502              JMP     READ_REG_P              * Jump to printing
+00001320                           503  
+00001320  B03C 0037                504  READ_REG_A7 CMP.B   #$37,       D0          * Check if '0'
+00001324  6600 0092                505              BNE     READ_REG_E              * Jump to next test
+00001328  200F                     506              MOVE.L  A7,         D0          * Else move A7 to D0
+0000132A  4EF9 000013BC            507              JMP     READ_REG_P              * Jump to printing
+00001330                           508              
+00001330                           509              
+00001330  6100 FD48                510  READ_REG_D  BSR     GET_CHAR                * Get the address to read
+00001334  B03C 0030                511  READ_REG_D0 CMP.B   #$30,       D0          * Check if '0'
+00001338  6600 0014                512              BNE     READ_REG_D1             * Jump to next test
+0000133C  201F                     513              MOVE.L  (A7)+,      D0          * Restore working register
+0000133E  4EF9 000013BC            514              JMP     READ_REG_P              * Jump to printing
+00001344  6100 FEBA                515              BSR     PRT_NWLN                * Print new line
+00001348  6100 FEC6                516              BSR     PRT_REG                 * Print the register
+0000134C  4E75                     517              RTS                             * Return
+0000134E                           518          
+0000134E  B03C 0031                519  READ_REG_D1 CMP.B   #$31,       D0          * Check if '1'
+00001352  6600 000A                520              BNE     READ_REG_D2             * Jump to next test
+00001356  2001                     521              MOVE.L  D1,         D0          * Else move D1 to D0
+00001358  4EF9 000013BC            522              JMP     READ_REG_P              * Jump to printing
+0000135E                           523  
+0000135E  B03C 0032                524  READ_REG_D2 CMP.B   #$32,       D0          * Check if '0'
+00001362  6600 000A                525              BNE     READ_REG_D3             * Jump to next test
+00001366  2002                     526              MOVE.L  D2,         D0          * Else move D2 to D0
+00001368  4EF9 000013BC            527              JMP     READ_REG_P              * Jump to printing
+0000136E                           528  
+0000136E  B03C 0033                529  READ_REG_D3 CMP.B   #$33,       D0          * Check if '0'
+00001372  6600 000A                530              BNE     READ_REG_D4             * Jump to next test
+00001376  2003                     531              MOVE.L  D3,         D0          * Else move D3 to D0
+00001378  4EF9 000013BC            532              JMP     READ_REG_P              * Jump to printing
+0000137E                           533  
+0000137E  B03C 0034                534  READ_REG_D4 CMP.B   #$34,       D0          * Check if '0'
+00001382  6600 000A                535              BNE     READ_REG_D5             * Jump to next test
+00001386  2004                     536              MOVE.L  D4,         D0          * Else move D4 to D0
+00001388  4EF9 000013BC            537              JMP     READ_REG_P              * Jump to printing
+0000138E                           538  
+0000138E  B03C 0035                539  READ_REG_D5 CMP.B   #$35,       D0          * Check if '0'
+00001392  6600 000A                540              BNE     READ_REG_D6             * Jump to next test
+00001396  2005                     541              MOVE.L  D5,         D0          * Else move D5 to D0
+00001398  4EF9 000013BC            542              JMP     READ_REG_P              * Jump to printing
+0000139E                           543  
+0000139E  B03C 0036                544  READ_REG_D6 CMP.B   #$36,       D0          * Check if '0'
+000013A2  6600 000A                545              BNE     READ_REG_D7             * Jump to next test
+000013A6  2006                     546              MOVE.L  D6,         D0          * Else move D6 to D0
+000013A8  4EF9 000013BC            547              JMP     READ_REG_P               * Jump to printing
+000013AE                           548  
+000013AE  B03C 0037                549  READ_REG_D7 CMP.B   #$37,       D0          * Check if '0'
+000013B2  6600 0004                550              BNE     READ_REG_E              * Jump to next test
+000013B6  2007                     551              MOVE.L  D7,         D0          * Else move D7 to D0
+000013B8                           552  
+000013B8  4EF8 1188                553  READ_REG_E  JMP     PRT_ERR                 * Jump to printing
+000013BC                           554      
+000013BC  6100 FE42                555  READ_REG_P  BSR     PRT_NWLN                * Print new line
+000013C0  6100 FE4E                556              BSR     PRT_REG                 * Print the register
+000013C4  201F                     557              MOVE.L  (A7)+,      D0          * Restore working register
+000013C6                           558  
+000013C6  4E75                     559              RTS                             * Return
+000013C8                           560  
+000013C8                           561  *------------------ READ_ROM ----------------------------------------
+000013C8                           562  * Purpose: Reads data from a given ROM address
+000013C8                           563  * In:  D1
+000013C8                           564  * Out: PRT_****
+000013C8                           565  * Note: A4 overwritten
+000013C8                           566  *--------------------------------------------------------------------
+000013C8                           567  
+000013C8  2F00                     568  READ_ROM    MOVE.L  D0,         -(A7)       * Save working register
+000013CA  2F0A                     569              MOVE.L  A2,         -(A7)       * Save working register
+000013CC                           570  
+000013CC                           571              
+000013CC  6100 FC78                572              BSR     GET_ADDR                * Get target address
+000013D0                           573              
+000013D0  203C 0000FFFF            574              MOVE.L  #_LROM,     D0          * Load first two bytes with ROM target
+000013D6  C041                     575              AND.W   D1,         D0          * Set the last two bytes to specific address
+000013D8  2440                     576              MOVE.L  D0,         A2          * Move the data to the address register
+000013DA  2012                     577              MOVE.L  (A2),       D0          * Move the data from memory to D0
+000013DC                           578  
+000013DC  6100 FE32                579              BSR     PRT_REG                 * Print the contents            
+000013E0  245F                     580              MOVE.L  (A7)+,      A2          * Restore working register 
+000013E2  201F                     581              MOVE.L  (A7)+,      D0          * Restore working register 
+000013E4  4E75                     582              RTS                             * Return
+000013E6                           583   
+000013E6                           584  *------------------ RITE_RAM ----------------------------------------
+000013E6                           585  * Purpose: Writes data to a given RAM address
+000013E6                           586  * In:  GET_ADDR, GET_FOUR
+000013E6                           587  * Out: Data to RAM address
+000013E6                           588  *--------------------------------------------------------------------
+000013E6  2F00                     589  RITE_RAM    MOVE.L  D0,         -(A7)       * Save working register
+000013E8  2F0A                     590              MOVE.L  A2,         -(A7)       * Save working register
+000013EA                           591              
+000013EA  6100 FC5A                592              BSR     GET_ADDR                * Get target address
+000013EE  203C 00F0FFFF            593              MOVE.L  #_LRAM,     D0          * Load first two bytes with RAM target
+000013F4  C041                     594              AND.W   D1,         D0          * Set the last two bytes to specific address
+000013F6  2440                     595              MOVE.L  D0,         A2          * Move the data to the address register
+000013F8                           596              
+000013F8  49F8 01F9                597              LEA     _NDAT,      A4          * Load New Ram Prompt
+000013FC  6100 FE32                598              BSR     PRT_STRG       
+00001400                           599              
+00001400  6100 FC8E                600              BSR     GET_FOUR                * Get the first four data points
+00001404  E189                     601              LSL.L   #8,         D1          * Shift the data over to make space
+00001406  E189                     602              LSL.L   #8,         D1          * Shift the data over to make space
+00001408  6100 FC86                603              BSR     GET_FOUR                * Get the latter four data points
+0000140C  2481                     604              MOVE.L  D1,         (A2)        * Move the data to memory
+0000140E  6100 FDF0                605              BSR     PRT_NWLN                * Print new line
+00001412  6100 FDEC                606              BSR     PRT_NWLN                * Print new line
+00001416                           607  
+00001416  245F                     608              MOVE.L  (A7)+,      A2          * Restore working register 
+00001418  201F                     609              MOVE.L  (A7)+,      D0          * Restore working register 
+0000141A  4E75                     610              RTS                             * Return
+0000141C                           611  
+0000141C                           612  *------------------ RITE_REG ----------------------------------------
+0000141C                           613  * Purpose: Writes data to a selected register
+0000141C                           614  * In:  GET_CHAR, GET_FOUR
+0000141C                           615  * Out: Data to selected register
+0000141C                           616  *--------------------------------------------------------------------
+0000141C  2F00                     617  RITE_REG    MOVE.L  D0,         -(A7)       * Save working register
+0000141E  2F01                     618              MOVE.L  D1,         -(A7)       * Save working register
+00001420                           619              
+00001420  6100 FDDE                620              BSR     PRT_NWLN                * Print new line
+00001424  49F8 02F2                621              LEA     _RREQ,      A4          * Load register prompt
+00001428  6100 FE06                622              BSR     PRT_STRG                * Print message            
+0000142C  6100 FC4C                623              BSR     GET_CHAR                * Get the register type to read
+00001430  B03C 0041                624              CMP.B   #$41,       D0          * Check if 'A'
+00001434  6700 001E                625              BEQ     RITE_REG_A
+00001438  B03C 0061                626              CMP.B   #$61,       D0          * Check if 'a'
+0000143C  6700 0016                627              BEQ     RITE_REG_A
+00001440                           628  
+00001440  B03C 0044                629              CMP.B   #$44,       D0          * Check if 'D'
+00001444  6700 00B2                630              BEQ     RITE_REG_D
+00001448  B03C 0064                631              CMP.B   #$64,       D0          * Check if 'd'
+0000144C  6700 00AA                632              BEQ     RITE_REG_D
+00001450  4EF8 1188                633              JMP     PRT_ERR                 * Else error and return
+00001454                           634              
+00001454  6100 FC24                635  RITE_REG_A  BSR     GET_CHAR                * Get the register # to read
+00001458  6100 FDA6                636              BSR     PRT_NWLN                * Print a new line
+0000145C  49F8 01F9                637              LEA     _NDAT,      A4          * Load new data Prompt
+00001460  6100 FDCE                638              BSR     PRT_STRG                * Print the message
+00001464                           639              
+00001464  6100 FC2A                640              BSR     GET_FOUR                * Get the first four data points
+00001468  E189                     641              LSL.L   #8,         D1          * Shift the data over to make space
+0000146A  E189                     642              LSL.L   #8,         D1          * Shift the data over to make space
+0000146C  6100 FC22                643              BSR     GET_FOUR                * Get the latter four data points
+00001470  6100 FD8E                644              BSR     PRT_NWLN                * Print a new line
+00001474  6100 FD8A                645              BSR     PRT_NWLN                * Print a new line
+00001478                           646              
+00001478  B03C 0030                647  RITE_REG_A0 CMP.B   #$30,       D0          * Check if '0'
+0000147C  6600 000A                648              BNE     RITE_REG_A1             * Jump to next test
+00001480  2041                     649              MOVE.L  D1,         A0          * Move the data to memory
+00001482  4EF9 0000159E            650              JMP     RITE_REG_X              * Jump to exit
+00001488                           651  
+00001488  B03C 0031                652  RITE_REG_A1 CMP.B   #$31,       D0          * Check if '1'
+0000148C  6600 000A                653              BNE     RITE_REG_A2             * Jump to next test
+00001490  2241                     654              MOVE.L  D1,         A1          * Move the data to memory
+00001492  4EF9 0000159E            655              JMP     RITE_REG_X              * Jump to exit
+00001498                           656  
+00001498  B03C 0032                657  RITE_REG_A2 CMP.B   #$32,       D0          * Check if '0'
+0000149C  6600 000A                658              BNE     RITE_REG_A3             * Jump to next test
+000014A0  2441                     659              MOVE.L  D1,         A2          * Move the data to memory
+000014A2  4EF9 0000159E            660              JMP     RITE_REG_X              * Jump to exit
+000014A8                           661  
+000014A8  B03C 0033                662  RITE_REG_A3 CMP.B   #$33,       D0          * Check if '0'
+000014AC  6600 000A                663              BNE     RITE_REG_A4             * Jump to next test
+000014B0  2641                     664              MOVE.L  D1,         A3          * Move the data to memory
+000014B2  4EF9 0000159E            665              JMP     RITE_REG_X              * Jump to exit
+000014B8                           666  
+000014B8  B03C 0034                667  RITE_REG_A4 CMP.B   #$34,       D0          * Check if '0'
+000014BC  6600 000A                668              BNE     RITE_REG_A5             * Jump to next test
+000014C0  2841                     669              MOVE.L  D1,         A4          * Move the data to memory
+000014C2  4EF9 0000159E            670              JMP     RITE_REG_X              * Jump to exit
+000014C8                           671  
+000014C8  B03C 0035                672  RITE_REG_A5 CMP.B   #$35,       D0          * Check if '0'
+000014CC  6600 000A                673              BNE     RITE_REG_A6             * Jump to next test
+000014D0  2A41                     674              MOVE.L  D1,         A5          * Move the data to memory
+000014D2  4EF9 0000159E            675              JMP     RITE_REG_X              * Jump to exit
+000014D8                           676  
+000014D8  B03C 0036                677  RITE_REG_A6 CMP.B   #$36,       D0          * Check if '0'
+000014DC  6600 000A                678              BNE     RITE_REG_A7             * Jump to next test
+000014E0  2C41                     679              MOVE.L  D1,         A6          * Move the data to memory
+000014E2  4EF9 0000159E            680              JMP     RITE_REG_X              * Jump to exit
+000014E8                           681  
+000014E8  B03C 0037                682  RITE_REG_A7 CMP.B   #$37,       D0          * Check if '0'
+000014EC  6600 00AC                683              BNE     RITE_REG_E              * Jump to next test
+000014F0  2E41                     684              MOVE.L  D1,         A7          * Move the data to memory
+000014F2  4EF9 0000159E            685              JMP     RITE_REG_X              * Jump to exit
+000014F8                           686  
+000014F8                           687              
+000014F8  6100 FB80                688  RITE_REG_D  BSR     GET_CHAR                * Get the register # to read
+000014FC  6100 FD02                689              BSR     PRT_NWLN                * Print a new line
+00001500  49F8 01F9                690              LEA     _NDAT,      A4          * Load new data Prompt
+00001504  6100 FD2A                691              BSR     PRT_STRG                * Print the message
+00001508                           692              
+00001508  6100 FB86                693              BSR     GET_FOUR                * Get the first four data points
+0000150C  E189                     694              LSL.L   #8,         D1          * Shift the data over to make space
+0000150E  E189                     695              LSL.L   #8,         D1          * Shift the data over to make space
+00001510  6100 FB7E                696              BSR     GET_FOUR                * Get the latter four data points
+00001514  6100 FCEA                697              BSR     PRT_NWLN                * Print a new line
+00001518  6100 FCE6                698              BSR     PRT_NWLN                * Print a new line
+0000151C                           699              
+0000151C  B03C 0030                700  RITE_REG_D0 CMP.B   #$30,       D0          * Check if '0'
+00001520  6600 000A                701              BNE     RITE_REG_D1             * Jump to next test
+00001524  2001                     702              MOVE.L  D1,         D0          * Move the data to memory
+00001526  221F                     703              MOVE.L  (A7)+,      D1          * Restore working register
+00001528  285F                     704              MOVE.L  (A7)+,      A4          * Move D0 save to trash
+0000152A  4E75                     705              RTS                             * Return
+0000152C                           706              
+0000152C  B03C 0031                707  RITE_REG_D1 CMP.B   #$31,       D0          * Check if '1'
+00001530  6600 0008                708              BNE     RITE_REG_D2             * Jump to next test
+00001534  201F                     709              MOVE.L  (A7)+,      D0          * Move D1 save to trash
+00001536  201F                     710              MOVE.L  (A7)+,      D0          * Restore working register
+00001538  4E75                     711              RTS                             * Return
+0000153A                           712              
+0000153A  B03C 0032                713  RITE_REG_D2 CMP.B   #$32,       D0          * Check if '0'
+0000153E  6600 000A                714              BNE     RITE_REG_D3             * Jump to next test
+00001542  2401                     715              MOVE.L  D1,         D2          * Move the data to memory
+00001544  4EF9 0000159E            716              JMP     RITE_REG_X              * Jump to exit
+0000154A                           717  
+0000154A  B03C 0033                718  RITE_REG_D3 CMP.B   #$33,       D0          * Check if '0'
+0000154E  6600 000A                719              BNE     RITE_REG_D4             * Jump to next test
+00001552  2601                     720              MOVE.L  D1,         D3          * Move the data to memory
+00001554  4EF9 0000159E            721              JMP     RITE_REG_X              * Jump to exit
+0000155A                           722  
+0000155A  B03C 0034                723  RITE_REG_D4 CMP.B   #$34,       D0          * Check if '0'
+0000155E  6600 000A                724              BNE     RITE_REG_D5             * Jump to next test
+00001562  2801                     725              MOVE.L  D1,         D4          * Move the data to memory
+00001564  4EF9 0000159E            726              JMP     RITE_REG_X              * Jump to exit
+0000156A                           727  
+0000156A  B03C 0035                728  RITE_REG_D5 CMP.B   #$35,       D0          * Check if '0'
+0000156E  6600 000A                729              BNE     RITE_REG_D6             * Jump to next test
+00001572  2A01                     730              MOVE.L  D1,         D5          * Move the data to memory
+00001574  4EF9 0000159E            731              JMP     RITE_REG_X              * Jump to exit
+0000157A                           732  
+0000157A  B03C 0036                733  RITE_REG_D6 CMP.B   #$36,       D0          * Check if '0'
+0000157E  6600 000A                734              BNE     RITE_REG_D7             * Jump to next test
+00001582  2C01                     735              MOVE.L  D1,         D6          * Move the data to memory
+00001584  4EF9 0000159E            736              JMP     RITE_REG_X              * Jump to exit
+0000158A                           737  
+0000158A  B03C 0037                738  RITE_REG_D7 CMP.B   #$37,       D0          * Check if '0'
+0000158E  6600 000A                739              BNE     RITE_REG_E              * Jump to next test
+00001592  2E01                     740              MOVE.L  D1,         D7          * Move the data to memory
+00001594  4EF9 0000159E            741              JMP     RITE_REG_X              * Jump to exit
+0000159A                           742  
+0000159A                           743  
+0000159A  4EF8 1188                744  RITE_REG_E  JMP     PRT_ERR                 * Jump to printing
+0000159E                           745      
+0000159E  221F                     746  RITE_REG_X  MOVE.L  (A7)+,      D1          * Restore working register
+000015A0  201F                     747              MOVE.L  (A7)+,      D0          * Restore working register
+000015A2  4E75                     748              RTS                             * Return
+000015A4                           749  
+000015A4                           750  
+000015A4                           751  *------------------ RITE_2REC ----------------------------------------
+000015A4                           752  * Purpose: Writes the S-Record to memory
+000015A4                           753  * In:  GET_CHAR, GET_FOUR
+000015A4                           754  * Out: S-Record to RAM
+000015A4                           755  *--------------------------------------------------------------------
+000015A4  2F02                     756  RITE_2REC   MOVE.L  D2,         -(A7)       * Store working register
+000015A6  2F01                     757              MOVE.L  D1,         -(A7)       * Store working register
+000015A8  2F00                     758              MOVE.L  D0,         -(A7)       * Store working register
+000015AA                           759    
+000015AA  7200                     760              MOVE.L  #$00000000, D1
+000015AC  E909                     761  RITE_REC_L1 LSL.B   #4,         D1          * Shift to make space for next input
+000015AE  6100 FACA                762              BSR     GET_CHAR                * Get the next char
+000015B2  6100 FB2E                763              BSR     MAKE_HEX                * Try to convert the input to hex
+000015B6  5302                     764              SUBI.B  #$01,       D2          * Decrement
+000015B8  66F2                     765              BNE     RITE_REC_L1             * Restart loop if needed
+000015BA  1401                     766              MOVE.B  D1,         D2
+000015BC                           767              
+000015BC  E909                     768              LSL.B   #4,         D1          * Shift to make space for next input
+000015BE  6100 FABA                769              BSR     GET_CHAR                * Get the next char
+000015C2  6100 FB1E                770              BSR     MAKE_HEX                * Try to convert the input to hex
+000015C6  E909                     771              LSL.B   #4,         D1          * Shift for rest of byte
+000015C8  6100 FAB0                772              BSR     GET_CHAR                * Get the next character
+000015CC  6100 FB14                773              BSR     MAKE_HEX                * Convert to hex
+000015D0  E189                     774              LSL.L   #8,         D1          * Shift over 1 byte
+000015D2  E189                     775              LSL.L   #8,         D1          * Shift over 1 byte
+000015D4                           776              
+000015D4  6100 FABA                777              BSR     GET_FOUR                * Get target address
+000015D8  303C 0001                778              MOVE.W  #$0001,     D0          * Move 1 into D0
+000015DC  C001                     779              AND.B   D1,         D0          * Isolate last bit of D0
+000015DE  6600 FBA8                780              BNE     PRT_ERR                 * If address is odd, Err
+000015E2                           781              
+000015E2                           782  
+000015E2  2441                     783              MOVE.L  D1,         A2          * Move the data to the address register
+000015E4  5902                     784              SUBI.B  #$04,       D2          * Decrement for used bytes and to ignore checksum
+000015E6                           785              
+000015E6  E909                     786  RITE_REC_L2 LSL.B   #4,         D1          * Shift to make space for next input
+000015E8  6100 FA90                787              BSR     GET_CHAR                * Get the next char
+000015EC  6100 FAF4                788              BSR     MAKE_HEX                * Try to convert the input to hex
+000015F0  E909                     789              LSL.B   #4,         D1          * Shift for rest of byte
+000015F2  6100 FA86                790              BSR     GET_CHAR                * Get the next character
+000015F6  6100 FAEA                791              BSR     MAKE_HEX                * Convert to hex
+000015FA  14C1                     792              MOVE.B  D1,         (A2)+
+000015FC  5302                     793              SUBI.B  #$01,       D2          * Decrement
+000015FE  66E6                     794              BNE     RITE_REC_L2             * Restart loop if needed
+00001600  1401                     795              MOVE.B  D1,         D2
+00001602                           796              
+00001602  6100 FA76                797              BSR     GET_CHAR                * Absorb checksum
+00001606  6100 FA72                798              BSR     GET_CHAR                * Absorb checksum
+0000160A  6100 FA6E                799              BSR     GET_CHAR                * Absorb CR
+0000160E                           800  
+0000160E                           801              
+0000160E  201F                     802              MOVE.L  (A7)+,      D0          * Restore working register
+00001610  221F                     803              MOVE.L  (A7)+,      D1          * Restore working register
+00001612  241F                     804              MOVE.L  (A7)+,      D2          * Restore working register
+00001614                           805  
+00001614                           806  
+00001614  4E75                     807              RTS                             * Else return 
+00001616                           808  
+00001616                           809  *------------------ RITE_8REC ----------------------------------------
+00001616                           810  * Purpose: Writes the S-Record to memory
+00001616                           811  * In:  GET_CHAR, GET_FOUR
+00001616                           812  * Out: PRT_****, Write to memory
+00001616                           813  *--------------------------------------------------------------------
+00001616  2F02                     814  RITE_8REC   MOVE.L  D2,         -(A7)       * Store working register
+00001618  2F01                     815              MOVE.L  D1,         -(A7)       * Store working register
+0000161A  2F00                     816              MOVE.L  D0,         -(A7)       * Store working register
+0000161C                           817    
+0000161C                           818              
+0000161C  E909                     819  RITE_REC_L8 LSL.B   #4,         D1          * Shift to make space for next input
+0000161E  6100 FA5A                820              BSR     GET_CHAR                * Get the next char
+00001622  6100 FABE                821              BSR     MAKE_HEX                * Try to convert the input to hex
+00001626  5302                     822              SUBI.B  #$01,       D2          * Decrement
+00001628  66F2                     823              BNE     RITE_REC_L8             * Restart loop if needed
+0000162A  1401                     824              MOVE.B  D1,         D2
+0000162C                           825              
+0000162C  E909                     826              LSL.B   #4,         D1          * Shift to make space for next input
+0000162E  6100 FA4A                827              BSR     GET_CHAR                * Get the next char
+00001632  6100 FAAE                828              BSR     MAKE_HEX                * Try to convert the input to hex
+00001636  E909                     829              LSL.B   #4,         D1          * Shift for rest of byte
+00001638  6100 FA40                830              BSR     GET_CHAR                * Get the next character
+0000163C  6100 FAA4                831              BSR     MAKE_HEX                * Convert to hex
+00001640  E189                     832              LSL.L   #8,         D1          * Shift over 1 byte
+00001642  E189                     833              LSL.L   #8,         D1          * Shift over 1 byte
+00001644                           834              
+00001644  6100 FA4A                835              BSR     GET_FOUR                * Get target address
+00001648  303C 0001                836              MOVE.W  #$0001,     D0          * Move 1 into D0
+0000164C  C001                     837              AND.B   D1,         D0          * Isolate last bit of D0
+0000164E  6600 FB38                838              BNE     PRT_ERR                 * If address is odd, Err
+00001652                           839              
+00001652                           840  
+00001652  2241                     841              MOVE.L  D1,         A1          * Move the data to the address register
+00001654  5902                     842              SUBI.B  #$04,       D2          * Decrement for used bytes and to ignore checksum
+00001656                           843                          
+00001656  6100 FA22                844              BSR     GET_CHAR                * Absorb checksum
+0000165A  6100 FA1E                845              BSR     GET_CHAR                * Absorb checksum
+0000165E                           846              
+0000165E  6100 FBA0                847              BSR     PRT_NWLN                * Print new line
+00001662  6100 FB9C                848              BSR     PRT_NWLN                * Print new line
+00001666                           849  
+00001666                           850  
+00001666  201F                     851              MOVE.L  (A7)+,      D0          * Restore working register
+00001668  221F                     852              MOVE.L  (A7)+,      D1          * Restore working register
+0000166A  241F                     853              MOVE.L  (A7)+,      D2          * Restore working register
+0000166C                           854  
+0000166C                           855  
+0000166C  4E75                     856              RTS                             * Else return 
+0000166E                           857  
+0000166E                           858  *------------------ RITE_MREC ---------------------------------------
+0000166E                           859  * Purpose: Writes the S-Record to memory
+0000166E                           860  * In:  GET_CHAR
+0000166E                           861  * Out: PRT_****, RITE_*REC
+0000166E                           862  *--------------------------------------------------------------------
+0000166E                           863  RITE_MREC   
+0000166E  2F02                     864              MOVE.L  D2,         -(A7)       * Store working register
+00001670  2F01                     865              MOVE.L  D1,         -(A7)       * Store working register
+00001672  2F00                     866              MOVE.L  D0,         -(A7)       * Store working register
+00001674  6100 FB8A                867              BSR     PRT_NWLN                * Print new line
+00001678  49F8 02D5                868              LEA     _RREC,      A4          * Load S-Record Prompt
+0000167C  6100 FBB2                869              BSR     PRT_STRG                * Print it
+00001680                           870              
+00001680                           871              
+00001680  143C 0002                872  RITE_MREC_L MOVE.B  #$02,       D2          * Initialize the counter  
+00001684                           873              
+00001684  6100 F9F4                874              BSR     GET_CHAR                * Get first character
+00001688  B03C 0053                875              CMP.B   #$53,       D0          * Check if 'S'
+0000168C  6700 000E                876              BEQ     RITE_REC_LS
+00001690  B03C 0073                877              CMP.B   #$73,       D0          * Check if 's'
+00001694  6700 0006                878              BEQ     RITE_REC_LS
+00001698  4EF8 1188                879              JMP     PRT_ERR                 * Else error and return
+0000169C                           880  
+0000169C  6100 F9DC                881  RITE_REC_LS BSR     GET_CHAR                * Get second character
+000016A0  B03C 0032                882              CMP.B   #$32,       D0          * Check if '2' 
+000016A4  6700 000E                883              BEQ     RITE_MREC1              * Get Data
+000016A8  B03C 0038                884              CMP.B   #$38,       D0          * Check if '8'
+000016AC  6700 000E                885              BEQ     RITE_MREC2
+000016B0  4EF8 1188                886              JMP     PRT_ERR                 * Else error and return
+000016B4                           887              
+000016B4  6100 FEEE                888  RITE_MREC1  BSR     RITE_2REC
+000016B8  4EF8 1680                889              JMP     RITE_MREC_L
+000016BC                           890              
+000016BC  6100 FF58                891  RITE_MREC2  BSR     RITE_8REC
+000016C0                           892              
+000016C0  201F                     893              MOVE.L  (A7)+,      D0          * Restore working register
+000016C2  221F                     894              MOVE.L  (A7)+,      D1          * Restore working register
+000016C4  241F                     895              MOVE.L  (A7)+,      D2          * Restore working register
+000016C6                           896  
+000016C6                           897  
+000016C6  4E75                     898              RTS                             * Else return 
+000016C8                           899              
+000016C8                           900  *------------------ RUN_REC -----------------------------------------
+000016C8                           901  * Purpose: Runs the S-Record in memory
+000016C8                           902  * In:  N/A
+000016C8                           903  * Out: N/A
+000016C8                           904  *--------------------------------------------------------------------
+000016C8  4E91                     905  RUN_REC     JSR     (A1)
+000016CA  4E75                     906              RTS
+000016CC                           907            
+000016CC                           908  *------------------ RUN_OPT -----------------------------------------
+000016CC                           909  * Purpose: Calls the subroutine the user has selected
+000016CC                           910  * In:  D0
+000016CC                           911  * Out: NA
+000016CC                           912  * Note: A4 overwritten
+000016CC                           913  *--------------------------------------------------------------------
+000016CC  0C00 0031                914  RUN_OPT     CMPI.B  #$31,       D0          * If option 1 is not selected
+000016D0  6600 0008                915              BNE     RUN_OPT_2               * Go to option 2
+000016D4  6100 FCF2                916              BSR     READ_ROM                * Else read from ROM
+000016D8  4E75                     917              RTS                             * Return
+000016DA                           918              
+000016DA  0C00 0032                919  RUN_OPT_2   CMPI.B  #$32,       D0          * If option 2 is not selected
+000016DE  6600 0008                920              BNE     RUN_OPT_3               * Go to option 3
+000016E2  6100 FB76                921              BSR     READ_RAM                * Else read from RAM
+000016E6  4E75                     922              RTS                             * Return
+000016E8                           923  
+000016E8  0C00 0033                924  RUN_OPT_3   CMPI.B  #$33,       D0          * If option 3 is not selected
+000016EC  6600 0008                925              BNE     RUN_OPT_4               * Go to option 4
+000016F0  6100 FB84                926              BSR     READ_REG                * Else read from Register
+000016F4  4E75                     927              RTS                             * Return
+000016F6                           928  
+000016F6  0C00 0034                929  RUN_OPT_4   CMPI.B  #$34,       D0          * If option 4 is not selected
+000016FA  6600 0008                930              BNE     RUN_OPT_5               * Go to option 5
+000016FE  6100 FCE6                931              BSR     RITE_RAM                * Else write RAM
+00001702  4E75                     932              RTS                             * Return
+00001704                           933  
+00001704  0C00 0035                934  RUN_OPT_5   CMPI.B  #$35,       D0          * If option 5 is not selected
+00001708  6600 0008                935              BNE     RUN_OPT_6               * Go to option 6
+0000170C  6100 FD0E                936              BSR     RITE_REG                * Else write to a register
+00001710  4E75                     937              RTS                             * Return
+00001712                           938              
+00001712  0C00 0036                939  RUN_OPT_6   CMPI.B  #$36,       D0          * If option 6 is not selected
+00001716  6600 0008                940              BNE     RUN_OPT_7               * Go to option 7
+0000171A  6100 FF52                941              BSR     RITE_MREC               * Else Write the S-Record
+0000171E  4E75                     942              RTS                             * Return
+00001720                           943              
+00001720  0C00 0037                944  RUN_OPT_7   CMPI.B  #$37,       D0          * If option 6 is not selected
+00001724  6600 0006                945              BNE     RUN_OPT_E               * Go to error state
+00001728  619E                     946              BSR     RUN_REC                 * Else run S-Record
+0000172A  4E75                     947              RTS                             * Return
+0000172C                           948  
+0000172C                           949  
+0000172C                           950  
+0000172C  4EF8 1188                951  RUN_OPT_E   JMP     PRT_ERR                 * Error and reset                        
+00001730                           952              
+00001730  FFFF FFFF                953              SIMHALT                         * Halt simulator
+00001734                           954              END     BEGIN                   * last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ASC_ADDR            102C
+ASC_ADDR_L          1034
+BEGIN               1000
+GET_ADDR            1046
+GET_CHAR            107A
+GET_FOUR            1090
+GET_FOUR_L          1098
+INIT_DUART          10AA
+MAKE_HEX            10E2
+MAKE_HEX_2          10FC
+MAKE_HEX_3          1116
+MAKE_HEX_E          1130
+MAKE_HEX_X          1136
+MAKE_TEX            113A
+MAKE_TEX_2          114E
+MAKE_TEX_E          115C
+PRT_2BYT            1162
+PRT_ERR             1188
+PRT_MENU            11A0
+PRT_NWLN            1200
+PRT_REG             1210
+PRT_STRG            1230
+PRT_STRG_1          1232
+PRT_STRG_2          123C
+PUT_CHAR            1240
+PUT_CHAR_L          1248
+READ_RAM            125A
+READ_REG            1276
+READ_REG_A          12AC
+READ_REG_A0         12B0
+READ_REG_A1         12C0
+READ_REG_A2         12D0
+READ_REG_A3         12E0
+READ_REG_A4         12F0
+READ_REG_A5         1300
+READ_REG_A6         1310
+READ_REG_A7         1320
+READ_REG_D          1330
+READ_REG_D0         1334
+READ_REG_D1         134E
+READ_REG_D2         135E
+READ_REG_D3         136E
+READ_REG_D4         137E
+READ_REG_D5         138E
+READ_REG_D6         139E
+READ_REG_D7         13AE
+READ_REG_E          13B8
+READ_REG_P          13BC
+READ_ROM            13C8
+RESET               1006
+RITE_2REC           15A4
+RITE_8REC           1616
+RITE_MREC           166E
+RITE_MREC1          16B4
+RITE_MREC2          16BC
+RITE_MREC_L         1680
+RITE_RAM            13E6
+RITE_REC_L1         15AC
+RITE_REC_L2         15E6
+RITE_REC_L8         161C
+RITE_REC_LS         169C
+RITE_REG            141C
+RITE_REG_A          1454
+RITE_REG_A0         1478
+RITE_REG_A1         1488
+RITE_REG_A2         1498
+RITE_REG_A3         14A8
+RITE_REG_A4         14B8
+RITE_REG_A5         14C8
+RITE_REG_A6         14D8
+RITE_REG_A7         14E8
+RITE_REG_D          14F8
+RITE_REG_D0         151C
+RITE_REG_D1         152C
+RITE_REG_D2         153A
+RITE_REG_D3         154A
+RITE_REG_D4         155A
+RITE_REG_D5         156A
+RITE_REG_D6         157A
+RITE_REG_D7         158A
+RITE_REG_E          159A
+RITE_REG_X          159E
+RUN_OPT             16CC
+RUN_OPT_2           16DA
+RUN_OPT_3           16E8
+RUN_OPT_4           16F6
+RUN_OPT_5           1704
+RUN_OPT_6           1712
+RUN_OPT_7           1720
+RUN_OPT_E           172C
+RUN_REC             16C8
+_AACC               127
+_ACR                9
+_AREQ               100
+_BAUD               CC
+_CONT               13A
+_CR                 D
+_CRA                5
+_CRLF               16D
+_CSRA               3
+_DUART              300000
+_ERRI               171
+_LF                 A
+_LRAM               F0FFFF
+_LROM               FFFF
+_MEN2               1E0
+_MENU               1A6
+_MORG               1000
+_MR1A               1
+_MR2A               1
+_NDAT               1F9
+_OPT1               228
+_OPT2               23B
+_OPT3               24E
+_OPT4               266
+_OPT5               279
+_OPT6               291
+_OPT7               2A9
+_PRMT               2C1
+_RBA                7
+_RREC               2D5
+_RREQ               2F2
+_RXRDY              0
+_SRA                3
+_STACK              F00800
+_TBA                7
+_TXRDY              2

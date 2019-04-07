@@ -1,0 +1,52 @@
+########################### Address ################################
+NET ADDR<0>						LOC=p54; # A20			64: p53			# I; LSB of Address
+NET ADDR<1>						LOC=p66; # A21			64: p54			# I;
+NET ADDR<2>						LOC=p68; # A22			64: p55			# I;
+NET ADDR<3>						LOC=p70; # A23			64: p56			# I; MSB of Address
+
+########################### Chip Enables ###########################
+NET ROM_H_Enable				LOC=p05; # ROMCEH		64: p27			# O; 0 when enabled
+NET ROM_H_Output				LOC=p06; # ROMOEH		64: p28			# O; 0 when enabled
+NET ROM_H_Input				LOC=p07; # ROMWEH		64: p29			# O; 0 when enabled
+NET ROM_L_Enable				LOC=p33; # ROMCEL		64: p33			# O; 0 when enabled
+NET ROM_L_Output				LOC=p35; # ROMOEL		64: p34			# O; 0 when enabled
+NET ROM_L_Input				LOC=p37; # ROMWEL		64: p35			# O; 0 when enabled
+NET RAM_H_Enable				LOC=p39; # RAMCEH		64: p36			# O; 0 when enabled
+NET RAM_H_Output				LOC=p40; # RAMOEH		64: p37			# O; 0 when enabled
+NET RAM_H_Input				LOC=p41; # RAMWEH		64: p38			# O; 0 when enabled
+NET RAM_L_Enable				LOC=p43; # RAMCEL		64: p43			# O; 0 when enabled
+NET RAM_L_Input				LOC=p44; # RAMWEL??	64: p44			# O; 0 when enabled
+NET RAM_L_Output				LOC=p45; # RAMOEL??	64: p45			# O; 0 when enabled	
+
+########################### DUART Control ##########################
+NET DUART_Enable				LOC=p24; # DCSN 		64: p22			# O; 0 when enabled
+NET DUART_Reset				LOC=p20; # DRESETN	64: p24			# O; 0 when triggered
+NET DUART_Data_ACK			LOC=p18; # DDTACKN	64: p25			# I; 0 when acknowledged	
+NET DUART_Read_Write			LOC=p14; # DRW			64: p26			# O; 1 Read; 0 Write
+
+########################### CPLD Control ###########################
+NET CPLD_Button				LOC=p11; # ------		64: p09			# I; Detects button press	
+NET CPLD_CLK					LOC=p9;  # ------		64: p05			# I; 80MHz Clock for CPLD		
+
+########################### CPU Control ############################
+NET CPU_Bus_ERR				LOC=p46; # CBERR		64: p47			# I; 0 when bus error
+NET CPU_Valid_Periph_Add	LOC=p47; # CVPA		64: p48			# I; Indicates device address is m6800 family device
+NET CPU_Enable					LOC=p48; # CE			64: p49			# O; Free running enable signal clock ??
+NET CPU_Valid_Memory_Add	LOC=p50; # CVMA		64: p50			# I; 0 when memory valid
+NET CPU_Reset					LOC=p51; # CRESET		64: p51			# O; Hold 0 with Halts for 100ns to reset CPU
+NET CPU_Halt					LOC=p53; # CHALT		64: p52 			# O; Hold 0 with Reset for 100ns to reset CPU
+NET CPU_Bus_REQ				LOC=p72; # CBR			64: p57			# I; Set to 0 by a device requesting the bus
+NET CPU_Bus_Grant_ACK		LOC=p75; # CBGACK		64: p58			# O; Set to 0 when another device controls the bus
+NET CPU_Bus_Grant				LOC=p79; # CBG			64: p59			# I; 0 when control will end after next cycle
+NET CPU_Data_ACK				LOC=p80; # CDTACK		64: p60			# O; Set to 0 by the slave when data bus is valid
+NET CPU_Read_Write			LOC=p81; # CRW			64: p61			# I; 1 Read; 0 Write
+NET CPU_L_Data_Ready			LOC=p82; # CLDS		64: p62			# I; 0 when lower data is to be accessed
+NET CPU_H_Data_Ready			LOC=p83; # CUDS		64: p63			# I; 0 when upper data is to be accessed
+NET CPU_Add_Valid				LOC=p84; # CAS			64: p64			# I; 0 when address bus is valid
+NET CPU_Clock					LOC=p12;	# CCLK		64: p06			# O; Divided CPU Clock
+
+########################### General IO ############################
+NET LED<0>						LOC=p01;	# LEDBO		64: N/A			# O; LSB of LED Array
+NET LED<1>						LOC=p02;	# LEDBO		64: N/A			# O;
+NET LED<2>						LOC=p03;	# LEDBO		64: N/A			# O;
+NET LED<3>						LOC=p04;	# LEDBO		64: N/A			# O; MSB of LED Array

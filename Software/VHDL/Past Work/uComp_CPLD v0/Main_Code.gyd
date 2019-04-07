@@ -1,0 +1,45 @@
+Pin Freeze File:  version P.68d
+
+957284 XC9572-7-PC84
+ADD<0> S:PIN54
+ADD<1> S:PIN66
+ADD<2> S:PIN68
+ADD<3> S:PIN70
+CPLD_CLK S:PIN9
+CPU_Add_Data_Valid S:PIN84
+CPU_H_Data_Ready S:PIN83
+CPU_L_Data_Ready S:PIN82
+CPU_Read_Write S:PIN81
+DUART_Enable S:PIN1
+DUART_Read_Write S:PIN4
+CPU_Clock S:PIN46
+RAM_H_Enable S:PIN37
+RAM_H_Input S:PIN40
+RAM_H_Output S:PIN39
+RAM_L_Enable S:PIN41
+RAM_L_Input S:PIN43
+RAM_L_Output S:PIN44
+ROM_H_Output S:PIN6
+ROM_H_Enable S:PIN5
+ROM_L_Output S:PIN33
+ROM_L_Enable S:PIN11
+
+
+;The remaining section of the .gyd file is for documentation purposes only.
+;It shows where your internal equations were placed in the last successful fit.
+
+PARTITION FB1_1 DUART_Read_Write_OBUF DUART_Enable_OBUF ROM_H_Output_OBUF
+PARTITION FB1_7 ROM_L_Output_OBUF$BUF0 ROM_H_Output_OBUF$BUF0
+
+
+PARTITION FB3_10 RAM_H_Input_OBUF ROM_L_Output_OBUF RAM_L_Enable_OBUF RAM_L_Input_OBUF
+		
+PARTITION FB3_15 RAM_H_Enable_OBUF
+PARTITION FB3_17 RAM_H_Output_OBUF
+
+PARTITION FB4_1 I_CPU_Clock RAM_L_Output_OBUF
+PARTITION FB4_6 I_Count1<9> I_Count1<8> I_Count1<7> I_Count1<6>
+		 I_Count1<5> I_Count1<4> I_Count1<3> I_Count1<2>
+		 I_Count1<1> I_Count1<12> I_Count1<11> I_Count1<10>
+		 I_Count1<0>
+

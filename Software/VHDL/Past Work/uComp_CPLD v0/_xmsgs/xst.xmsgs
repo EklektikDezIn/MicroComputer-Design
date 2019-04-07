@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="error" file="HDLParsers" num="3312" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">51</arg>. Undefined symbol &apos;<arg fmt="%s" index="3">ROM_H_Output</arg>&apos;.
+</msg>
+
+<msg type="error" file="HDLParsers" num="3312" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">56</arg>. Undefined symbol &apos;<arg fmt="%s" index="3">ROM_L_Output</arg>&apos;.
+</msg>
+
+<msg type="error" file="HDLParsers" num="3312" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">62</arg>. Undefined symbol &apos;<arg fmt="%s" index="3">RAM_H_Output</arg>&apos;.
+</msg>
+
+<msg type="error" file="HDLParsers" num="3312" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">67</arg>. Undefined symbol &apos;<arg fmt="%s" index="3">RAM_L_Output</arg>&apos;.
+</msg>
+
+<msg type="error" file="HDLParsers" num="3312" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">74</arg>. Undefined symbol &apos;<arg fmt="%s" index="3">RAM_H_Input</arg>&apos;.
+</msg>
+
+<msg type="error" file="HDLParsers" num="3312" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">79</arg>. Undefined symbol &apos;<arg fmt="%s" index="3">RAM_L_Input</arg>&apos;.
+</msg>
+
+<msg type="error" file="HDLParsers" num="1209" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">83</arg>. <arg fmt="%s" index="3">ROM_H_Output</arg>: Undefined symbol (last report in this block)
+</msg>
+
+<msg type="error" file="HDLParsers" num="1209" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">85</arg>. <arg fmt="%s" index="3">ROM_L_Output</arg>: Undefined symbol (last report in this block)
+</msg>
+
+<msg type="error" file="HDLParsers" num="1209" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">87</arg>. <arg fmt="%s" index="3">RAM_H_Input</arg>: Undefined symbol (last report in this block)
+</msg>
+
+<msg type="error" file="HDLParsers" num="1209" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">88</arg>. <arg fmt="%s" index="3">RAM_H_Output</arg>: Undefined symbol (last report in this block)
+</msg>
+
+<msg type="error" file="HDLParsers" num="1209" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">90</arg>. <arg fmt="%s" index="3">RAM_L_Input</arg>: Undefined symbol (last report in this block)
+</msg>
+
+<msg type="error" file="HDLParsers" num="1209" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/shimonrigdon/Desktop/Micah for uComp/uComp_CPLD/Main_Code.vhd</arg>&quot; Line <arg fmt="%d" index="2">91</arg>. <arg fmt="%s" index="3">RAM_L_Output</arg>: Undefined symbol (last report in this block)
+</msg>
+
+</messages>
+

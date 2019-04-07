@@ -1,0 +1,193 @@
+00000100 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 4/12/2018 10:19:45 PM
+
+00000000                             1  
+00000000                             2  *-----------------------------------------------------------
+00000000                             3  * Subroutine : DUART enable
+00000000                             4  * Written by : Instructor
+00000000                             5  * Date       : 2013
+00000000                             6  * Description: used to initialize a 68681 DUART
+00000000                             7  *-----------------------------------------------------------
+00000000                             8  
+00000000                             9  * Note, most DUART configurations are ignorant of UDS/LDS 
+00000000                            10  * and thus are only active on odd addresses (since the lower 
+00000000                            11  * data lines are usually run to the DUART data bus)
+00000000                            12  
+00000000                            13  ; *******************************************************************
+00000000                            14  ; Constants:    (Note the offsets to account for no A0)
+00000000  =00300000                 15  DUART   EQU     $300000     loaded in A0 when needed, regs are offsets
+00000000  =00000001                 16  MR1A    EQU     1   Mode Register1
+00000000  =00000001                 17  MR2A    EQU     1   points here after MR1A is set
+00000000  =00000003                 18  SRA     EQU     3     Status Register (read)
+00000000  =00000003                 19  CSRA    EQU     3     Clock Select Register
+00000000  =00000005                 20  CRA     EQU     5   Command Register
+00000000  =00000007                 21  TBA     EQU     7     Transfer Holding Register
+00000000  =00000007                 22  RBA     EQU     7   Receive Holding Register
+00000000  =00000009                 23  ACR     EQU     9   Auxiliary control register
+00000000  =00000000                 24  RxRDY   EQU     0   Recieve ready bit position
+00000000  =00000002                 25  TxRDY   EQU     2   Transmit ready bit position
+00000000  =000000CC                 26  BAUD    EQU     $CC   baud rate value = 19,200 baud
+00000000                            27  
+00000000  =0000000D                 28  CR         EQU     $0D                     * Carriage Return
+00000000  =0000000A                 29  LF         EQU     $0A                     * Line Feed
+00000000                            30  
+00000000                            31  ; *******************************************************************
+00000000                            32  
+00000000                            33  
+00000000                            34  
+00000000  =00F00800                 35  SUPER_STACK     EQU     $F00800 ; MUST BE A VALID RAM LOCATION
+00000000                            36  
+00000000                            37  
+00000000                            38  START       ORG     $000000
+00000000= 00F00800                  39              DC.L    SUPER_STACK
+00000004= 00000100                  40              DC.L    BEGIN
+00000008= 00000186                  41              DC.L    HANDLE_BERR   Berr
+0000000C= 0000019C                  42              DC.L    HANDLE_ADDR   Address Error
+00000010= 000001B2                  43              DC.L    HANDLE_ILIS   Illegal Instruction
+00000014= 000001C8                  44              DC.L    HANDLE_DIV0   Div by zero
+00000018                            45              
+00000100                            46              ORG     $000100        
+00000100  4EB9 0000017E             47  BEGIN       JSR RAM_TEST
+00000106  4EB9 00000122             48              JSR INIT_DUART
+0000010C  4EB9 0000015A             49  MAIN        JSR GETCHAR_A
+00000112  4EB9 0000016A             50              JSR PUTCHAR_A
+00000118  4EB9 0000017E             51              JSR RAM_TEST
+0000011E  4EF8 010C                 52              JMP MAIN
+00000122                            53          
+00000122                            54          
+00000122  41F9 00300000             55  INIT_DUART  LEA     DUART,A0        A0 points to base DUART address
+00000128                            56  
+00000128                            57  ; Software reset:
+00000128  117C 0030 0005            58          MOVE.B  #$30,CRA(A0)    Reset TxA
+0000012E  117C 0020 0005            59          MOVE.B  #$20,CRA(A0)    Reset RxA
+00000134  117C 0010 0005            60          MOVE.B  #$10,CRA(A0)    Reset MRA pointer
+0000013A                            61  
+0000013A                            62  ; Initialization:
+0000013A  117C 0080 0009            63          MOVE.B      #$80,ACR(A0)    selects baud rate set 2
+00000140  117C 00CC 0003            64          MOVE.B      #BAUD,CSRA(A0)      set 19.2k baud Rx/Tx
+00000146  117C 0013 0001            65          MOVE.B      #$13,MR1A(A0)       8-bits, no parity, 1 stop bit
+0000014C                            66  
+0000014C                            67  ; This is the most important register to set in the 68681 DUART.
+0000014C                            68  ; 07 sets: Normal mode, CTS and RTS disabled, stop bit length = 1
+0000014C                            69  ; For testing load $#47 to enable auto-echo
+0000014C  117C 0007 0001            70          MOVE.B  #$07,MR2A(A0)   
+00000152                            71  
+00000152  117C 0005 0005            72          MOVE.B  #$05,CRA(A0)    enable Tx and Rx
+00000158                            73          
+00000158  4E75                      74          RTS
+0000015A                            75          
+0000015A                            76   ; GETCHAR puts the read character into D0
+0000015A  1028 0003                 77  GETCHAR_A   MOVE.B SRA(A0), D0  Read the A status register
+0000015E  0800 0000                 78             BTST #RxRDY, D0 Test reciever ready status
+00000162  67F6                      79             BEQ GETCHAR_A   UNTIL char recieved
+00000164  1028 0007                 80             MOVE.B RBA(A0), D0  Read the character into D0
+00000168  4E75                      81             RTS
+0000016A                            82  *GETCHAR_A    MOVE.L  D1,         -(A7)       * Save working register
+0000016A                            83  *            MOVE    #5,         D0          * Store 'get single char' command
+0000016A                            84  *            TRAP    #15                     * Trigger simulator action
+0000016A                            85  *            MOVE    D1,         D0          * Move result into output register
+0000016A                            86  *            MOVE.L  (A7)+,      D1          * Restore working register
+0000016A                            87  *            RTS                             * Return
+0000016A                            88  
+0000016A                            89  ; PUTCHAR_A outputs D0 to the DUART channel A
+0000016A  3F00                      90  PUTCHAR_A   MOVE.W D0, -(SP)
+0000016C  1028 0003                 91  PUTCHAR_Apl  MOVE.B SRA(A0), D0
+00000170  0800 0002                 92             BTST   #TxRDY, D0
+00000174  67F6                      93             BEQ    PUTCHAR_Apl
+00000176  301F                      94             MOVE.W (SP)+, D0
+00000178  1140 0007                 95             MOVE.B D0, TBA(A0)
+0000017C  4E75                      96             RTS
+0000017E                            97  *PUTCHAR_A    MOVE.L  A0,        -(A7)       * Save working register
+0000017E                            98  *            LEA     DUART,    A0          * Store base DUART address in A0
+0000017E                            99  *            MOVE.B  D0,        $A0         * Move contents of D0 to location in A0
+0000017E                           100  *            MOVE.L  (A7)+,     A0          * Restore working register
+0000017E                           101  *            RTS                            * Return
+0000017E                           102          
+0000017E  4E71                     103  RAM_TEST    NOP
+00000180  4E71                     104              NOP
+00000182  4E71                     105              NOP
+00000184  4E75                     106              RTS
+00000186                           107              
+00000186  4FF9 00F00800            108  HANDLE_BERR LEA SUPER_STACK, SP
+0000018C  207C 00000204            109              MOVE.L #Err_BERR, A0
+00000192  4EB9 000001DE            110              JSR PUTSTR
+00000198  4EF8 0100                111              JMP BEGIN
+0000019C  4FF9 00F00800            112  HANDLE_ADDR LEA SUPER_STACK, SP
+000001A2  207C 0000020B            113              MOVE.L #Err_ADDR, A0
+000001A8  4EB9 000001DE            114              JSR PUTSTR
+000001AE  4EF8 0100                115              JMP BEGIN
+000001B2  4FF9 00F00800            116  HANDLE_ILIS LEA SUPER_STACK, SP
+000001B8  207C 00000212            117              MOVE.L #Err_ILIS, A0
+000001BE  4EB9 000001DE            118              JSR PUTSTR
+000001C4  4EF8 0100                119              JMP BEGIN
+000001C8  4FF9 00F00800            120  HANDLE_DIV0 LEA SUPER_STACK, SP
+000001CE  207C 00000219            121              MOVE.L #Err_DIV0, A0
+000001D4  4EB9 000001DE            122              JSR PUTSTR
+000001DA  4EF8 0100                123              JMP BEGIN
+000001DE                           124  
+000001DE                           125              ; Print String in A0
+000001DE  3F00                     126  PUTSTR      MOVE.W D0, -(SP)
+000001E0  3F01                     127              MOVE.W D1, -(SP)
+000001E2  4241                     128              CLR.W D1 Length will be stored here
+000001E4  B27C 0200                129  pst_Next    CMP.W #$200, D1 If >= 512, 
+000001E8  6400 0014                130              BHS pst_Quit   quit
+000001EC  1018                     131              MOVE.B (A0)+, D0
+000001EE  5241                     132              ADD #1, D1
+000001F0  B03C 0000                133              CMP.B #0, D0   If null,
+000001F4  6700 0008                134              BEQ pst_Quit   quit
+000001F8  4EB8 016A                135              JSR PUTCHAR_A
+000001FC  60E6                     136              BRA pst_Next
+000001FE  321F                     137  pst_Quit    MOVE.W (SP)+, D1
+00000200  301F                     138              MOVE.W (SP)+, D0
+00000202  4E75                     139              RTS
+00000204                           140              
+00000204= 42 45 52 52 0D 0A 00     141  Err_BERR  DC.B 'BERR',CR,LF,0
+0000020B= 41 44 44 52 0D 0A 00     142  Err_ADDR  DC.B 'ADDR',CR,LF,0
+00000212= 49 4C 49 53 0D 0A 00     143  Err_ILIS  DC.B 'ILIS',CR,LF,0
+00000219= 44 49 56 30 0D 0A 00     144  Err_DIV0  DC.B 'DIV0',CR,LF,0
+00000220                           145  
+00000220                           146  
+00000220                           147          END     BEGIN
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ACR                 9
+BAUD                CC
+BEGIN               100
+CR                  D
+CRA                 5
+CSRA                3
+DUART               300000
+ERR_ADDR            20B
+ERR_BERR            204
+ERR_DIV0            219
+ERR_ILIS            212
+GETCHAR_A           15A
+HANDLE_ADDR         19C
+HANDLE_BERR         186
+HANDLE_DIV0         1C8
+HANDLE_ILIS         1B2
+INIT_DUART          122
+LF                  A
+MAIN                10C
+MR1A                1
+MR2A                1
+PST_NEXT            1E4
+PST_QUIT            1FE
+PUTCHAR_A           16A
+PUTCHAR_APL         16C
+PUTSTR              1DE
+RAM_TEST            17E
+RBA                 7
+RXRDY               0
+SRA                 3
+START               0
+SUPER_STACK         F00800
+TBA                 7
+TXRDY               2

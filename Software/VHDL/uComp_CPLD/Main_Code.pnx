@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE ibis [
+<!ELEMENT ibis (part, pin+)>
+<!ELEMENT part EMPTY>
+<!ELEMENT pin EMPTY>
+<!ATTLIST part
+  arch   CDATA #REQUIRED
+  device CDATA #REQUIRED
+  spg    CDATA #REQUIRED
+  pkg    CDATA #REQUIRED>
+<!ATTLIST pin
+  nm     CDATA #REQUIRED
+  no     CDATA #REQUIRED
+  iostd  (TTL|LVTTL|LVCMOS2|NA) "NA"
+  sr     (SLOW|FAST|slow|fast) "SLOW"
+  dir    (BIDIR|bidir|INPUT|input|OUTPUT|output) "BIDIR">
+]>
+<ibis><part arch="xc9500" device="XC9572" pkg="PC84" spg="-7"/><pin dir="input" nm="ADDR&lt;3&gt;" no="70"/><pin dir="input" nm="ADDR&lt;2&gt;" no="68"/><pin dir="input" nm="ADDR&lt;1&gt;" no="66"/><pin dir="input" nm="ADDR&lt;0&gt;" no="54"/><pin dir="input" nm="CPU_L_Data_Ready" no="82"/><pin dir="input" nm="CPU_H_Data_Ready" no="83"/><pin dir="input" nm="CPU_Add_Valid" no="84"/><pin dir="input" nm="DUART_Data_ACK" no="18"/><pin dir="input" nm="CPLD_CLK" no="9"/><pin dir="input" nm="CPU_Read_Write" no="81"/><pin dir="input" nm="CPLD_Button" no="11"/><pin dir="output" nm="DUART_Read_Write" no="14" sr="fast"/><pin dir="output" nm="LED&lt;1&gt;" no="2" sr="fast"/><pin dir="output" nm="LED&lt;2&gt;" no="3" sr="fast"/><pin dir="output" nm="ROM_H_Output" no="6" sr="fast"/><pin dir="output" nm="ROM_L_Output" no="35" sr="fast"/><pin dir="output" nm="RAM_H_Enable" no="39" sr="fast"/><pin dir="output" nm="RAM_H_Input" no="41" sr="fast"/><pin dir="output" nm="RAM_H_Output" no="40" sr="fast"/><pin dir="output" nm="RAM_L_Enable" no="43" sr="fast"/><pin dir="output" nm="RAM_L_Input" no="44" sr="fast"/><pin dir="output" nm="RAM_L_Output" no="45" sr="fast"/><pin dir="output" nm="CPU_Reset" no="51" sr="fast"/><pin dir="output" nm="CPU_Halt" no="53" sr="fast"/><pin dir="output" nm="CPU_Clock" no="12" sr="fast"/><pin dir="output" nm="LED&lt;0&gt;" no="1" sr="fast"/><pin dir="output" nm="DUART_Enable" no="24" sr="fast"/><pin dir="output" nm="CPU_Data_ACK" no="80" sr="fast"/><pin dir="output" nm="LED&lt;3&gt;" no="4" sr="fast"/><pin dir="output" nm="ROM_H_Enable" no="5" sr="fast"/><pin dir="output" nm="ROM_L_Enable" no="33" sr="fast"/><pin dir="output" nm="CPU_Valid_Periph_Add" no="47" sr="fast"/><pin dir="output" nm="CPU_Bus_REQ" no="72" sr="fast"/><pin dir="output" nm="CPU_Bus_Grant_ACK" no="75" sr="fast"/><pin dir="output" nm="CPU_Bus_ERR" no="46" sr="fast"/><pin dir="bidir" nm="DUART_Reset" no="20" sr="fast"/></ibis>

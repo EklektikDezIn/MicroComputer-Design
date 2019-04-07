@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Users\MicahRichards\Downloads\uComp_CPLD-20180321T204928Z-001\uComp_CPLD\impact.xsl
+OUTFILE=C:\Users\MicahRichards\Downloads\uComp_CPLD-20180321T204928Z-001\uComp_CPLD\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Users\MicahRichards\Downloads\uComp_CPLD-20180321T204928Z-001\uComp_CPLD
+LICENSE=iMPACT
+USER_INFO=iMPACT

@@ -1,0 +1,37 @@
+Release 14.6 ngdbuild P.68d (nt)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+
+Command Line: C:\Xilinx\14.6\ISE_DS\ISE\bin\nt\unwrapped\ngdbuild.exe -intstyle
+ise -dd _ngo -uc Pin_Layouts.ucf -p xc9572-PC84-7 Main_Code.ngc Main_Code.ngd
+
+Reading NGO file
+"C:/Users/MicahRichards/Downloads/uComp_CPLD-20180321T204928Z-001 -
+Copy/uComp_CPLD/Main_Code.ngc" ...
+Gathering constraint information from source properties...
+Done.
+
+Annotating constraints to design from ucf file "Pin_Layouts.ucf" ...
+Resolving constraint associations...
+Checking Constraint Associations...
+Done...
+
+Checking expanded design ...
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+NGDBUILD Design Results Summary:
+  Number of errors:     0
+  Number of warnings:   0
+
+Total memory usage is 117480 kilobytes
+
+Writing NGD file "Main_Code.ngd" ...
+Total REAL time to NGDBUILD completion:  2 sec
+Total CPU time to NGDBUILD completion:   2 sec
+
+Writing NGDBUILD log file "Main_Code.bld"...

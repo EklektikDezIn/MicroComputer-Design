@@ -1,0 +1,63 @@
+Pin Freeze File:  version P.68d
+
+957284 XC9572-7-PC84
+ADDR<0> S:PIN54
+ADDR<1> S:PIN66
+ADDR<2> S:PIN68
+ADDR<3> S:PIN70
+CPLD_Button S:PIN11
+CPLD_CLK S:PIN9
+CPU_H_Data_Ready S:PIN83
+CPU_L_Data_Ready S:PIN82
+DUART_Data_ACK S:PIN18
+CPU_Read_Write S:PIN81
+CPU_Add_Valid S:PIN84
+CPU_Clock S:PIN12
+CPU_Valid_Periph_Add S:PIN47
+CPU_Bus_REQ S:PIN72
+CPU_Bus_Grant_ACK S:PIN75
+CPU_Bus_ERR S:PIN46
+DUART_Read_Write S:PIN14
+DUART_Reset S:PIN20
+LED<0> S:PIN1
+LED<1> S:PIN2
+DUART_Enable S:PIN24
+LED<2> S:PIN3
+CPU_Data_ACK S:PIN80
+LED<3> S:PIN4
+CPU_Reset S:PIN51
+CPU_Halt S:PIN53
+RAM_H_Enable S:PIN39
+RAM_H_Input S:PIN41
+RAM_H_Output S:PIN40
+RAM_L_Enable S:PIN43
+RAM_L_Input S:PIN44
+RAM_L_Output S:PIN45
+ROM_H_Output S:PIN6
+ROM_H_Enable S:PIN5
+ROM_L_Output S:PIN35
+ROM_L_Enable S:PIN33
+
+
+;The remaining section of the .gyd file is for documentation purposes only.
+;It shows where your internal equations were placed in the last successful fit.
+
+PARTITION FB1_1 LED_3_OBUF$BUF0 LED_0_OBUF$BUF0 ROM_H_Output_OBUF
+PARTITION FB1_5 LED_1_OBUF LED_2_OBUF
+PARTITION FB1_8 ROM_H_Output_OBUF$BUF0 I_Count2<2> I_Count2<4> I_Count2<3>
+		 I_Count1<12> DUART_Reset_OBUF CPU_Clock_OBUF$BUF0 DUART_Read_Write_OBUF
+		 I_Count2<1> I_Count2<0> LED_1_OBUF$BUF0
+PARTITION FB2_4 I_Count1<9> I_Count1<6> I_Count1<5> I_Count1<3>
+		 CPU_Valid_Periph_Add_OBUF$BUF0 I_Count1<1> CPU_Valid_Periph_Add_OBUF$BUF1 I_Count1<11>
+		 I_Count1<10> LED_2_OBUF$BUF0 I_Count1<0> I_Count1<8>
+		 I_Count1<7> I_Count1<4> I_Count1<2>
+PARTITION FB3_7 ROM_L_Output_OBUF
+PARTITION FB3_10 RAM_H_Output_OBUF ROM_L_Output_OBUF$BUF0 RAM_H_Input_OBUF RAM_L_Enable_OBUF
+		
+PARTITION FB3_16 RAM_L_Output_OBUF RAM_H_Enable_OBUF
+
+PARTITION FB4_1 CPU_Valid_Periph_Add_OBUF$BUF2 RAM_L_Input_OBUF N0
+PARTITION FB4_5 CPU_Valid_Periph_Add_OBUF
+PARTITION FB4_11 N0$BUF0
+
+
